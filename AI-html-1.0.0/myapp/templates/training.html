@@ -1,0 +1,144 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<body>
+  <link href="{% static 'css/trainingPage.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.6.12/plyr.css" />
+  <div class="container page-wrapper">
+    <div id="training-main">
+      <div class="container-video">
+        {% for folder in folders %}
+        <div class="folder" data-folder="{{ folder }}">
+          <div class="folder-icon"></div>
+          <div class="folder-name">{{ folder }}</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="video-container" style="display: none">
+        <div id="main-video"></div>
+        <div id="side-videos"></div>
+        <div class="loader" style="display: none"></div>
+        <button class="back-button" onclick="showFolders()">BACK TO FOLDER</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.plyr.io/3.6.12/plyr.polyfilled.js"></script>
+  <script>
+    var folderName = '';
+    var plyrInstance = null; // Store Plyr instance
+
+    $(document).ready(function () {
+      $(".folder").on("click", function () {
+        folderName = $(this).data("folder");
+        loadVideos(folderName);
+      });
+
+      $(document).on("click", ".side-video img", function () {
+        var videoWrapper = $(this).closest('.video-wrapper');
+        var videoUrl = videoWrapper.data('video-url');
+        setMainVideo(videoUrl);
+      });
+    });
+
+    function loadVideos(folderName) {
+      $.ajax({
+        url: "/get_videos/" + folderName + "/",
+        method: "GET",
+        beforeSend: function () {
+          $(".loader").show();
+        },
+        success: function (data) {
+          if (data.videos.length > 0) {
+            var mainVideoContainer = $("#main-video");
+            var sideVideosContainer = $("#side-videos");
+            mainVideoContainer.empty();
+            sideVideosContainer.empty();
+
+            var videoFiles = data.videos.filter(function (videoUrl) {
+              return videoUrl.endsWith('.mp4');
+            });
+
+            if (videoFiles.length > 0) {
+              setMainVideo(videoFiles[0]);
+            }
+
+            videoFiles.forEach(function (videoUrl) {
+              var videoWrapper = $("<div />", {
+                class: "video-wrapper side-video",
+                'data-video-url': videoUrl
+              });
+
+              var thumbnailUrl = videoUrl.replace('.mp4', '.jpg');
+              var thumbnailElement = $('<img />', {
+                src: thumbnailUrl,
+                css: { width: '100%', height: 'auto', cursor: 'pointer' }
+              });
+
+              var videoTitle = $("<div />", {
+                class: "video-title",
+                text: videoUrl.split("/").pop().replace(/\.[^/.]+$/, ""),
+              });
+
+              videoWrapper.append(thumbnailElement);
+              videoWrapper.append(videoTitle);
+              sideVideosContainer.append(videoWrapper);
+            });
+
+            $(".container-video").hide();
+            $(".video-container").show();
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.error("Failed to fetch videos: ", textStatus, errorThrown);
+          alert("Failed to load videos. Please try again later.");
+        },
+        complete: function () {
+          $(".loader").hide();
+        },
+      });
+    }
+
+    function setMainVideo(videoUrl) {
+      var mainVideoContainer = $("#main-video");
+      mainVideoContainer.empty();
+
+      var plyrElement = $('<video />', {
+        class: 'plyr',
+        controls: true,
+        width: '100%',
+        height: 'auto',
+        src: videoUrl,
+        type: 'video/mp4',
+      });
+
+      mainVideoContainer.append(plyrElement);
+
+      // Destroy previous Plyr instance if it exists
+      if (plyrInstance) {
+        plyrInstance.destroy();
+      }
+
+      // Initialize new Plyr instance
+      plyrInstance = new Plyr('.plyr');
+
+      // Ensure proper seeking functionality
+      plyrInstance.on('seeked', function() {
+        console.log('Video seeking completed');
+      });
+    }
+
+    function showFolders() {
+      // Pause the video if it's playing
+      if (plyrInstance) {
+        plyrInstance.pause();
+      }
+
+      $(".video-container").hide();
+      $(".container-video").show();
+    }
+  </script>
+</body>
+{% endblock %}

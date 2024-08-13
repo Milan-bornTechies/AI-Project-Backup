@@ -1,0 +1,92 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<link href={% static "css/text_to_image.css" %} rel="stylesheet">
+<body class="text-to-image">
+  <div class="text-section py-5">
+    <h1 class="white-text">
+        Imagine something,
+    </h1>
+    <h1>and just type it!</h1>
+    <p class="text-about-">Transform your ideas into stunning visuals with out image generator.our platform empowers you to effortlessly create captivating images that captivate the inspire</p>
+  </div> 
+  <div class="row language-row">
+  <div class="col-md-6 offset-md-3">
+    <form id="text-to-image-form">
+      <input type="text" id="prompt" name="prompt" placeholder="Let's make your dreams come true..">
+      <select id="resolution" name="resolution">
+        <option value="256x256">256x256</option>
+        <option value="512x512" selected>512x512</option>
+        <option value="1024x1024">1024x1024</option>
+      </select>
+      <button type="submit" class = "image-Generate-Btn">Generate Image</button>
+      <div class="spinner-wrapper" style="display:none; text-align:center;">
+        <div class="spinner-border text-danger form-spinner" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="progress mt-2" style="height: 20px;">
+          <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;">0%</div>
+        </div>
+      </div>  
+    </form>
+  </div>
+</div>
+  <div id="image-result" class="row">
+    <!-- Generated image will be displayed here -->
+  </div>
+  
+  <!-- jQuery CDN -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#text-to-image-form').submit(function(event) {
+        event.preventDefault(); // Prevent form from submitting normally
+
+        document.querySelector(".image-Generate-Btn").style.display = "none"
+        document.querySelector(".spinner-wrapper").style.display = "block"
+
+        const updateProgressBar = (percentage) => {
+          const progressBar = document.getElementById('progress-bar');
+          progressBar.style.width = percentage + '%';
+          progressBar.textContent = percentage + '%';
+        };
+
+        let progress = 0;
+        const interval = setInterval(() => {
+          if (progress < 95) {
+            progress += 5;
+            updateProgressBar(progress);
+          } else {
+            clearInterval(interval);
+          }
+        }, 1000);
+
+        $.ajax({
+          url: "{% url 'text_to_image' pk %}", // Django URL for the view
+          type: "POST",
+          data: {
+            'prompt': $('#prompt').val(),
+            'resolution': $('#resolution').val(),
+            'csrfmiddlewaretoken': '{{ csrf_token }}' // CSRF token for security
+          },
+          success: function(response) {
+            clearInterval(interval);
+            updateProgressBar(100);
+            $('#image-result').html('<img src="' + response.image_url + '" alt="Generated Image">');
+            document.querySelector(".image-Generate-Btn").style.display = "block"
+            document.querySelector(".spinner-wrapper").style.display = "none"
+          },
+          error: function(xhr, errmsg, err) {
+            clearInterval(interval);
+            alert("No Image Found.Try Again")
+            console.log(xhr.status + ": " + xhr.responseText);
+            document.querySelector(".image-Generate-Btn").style.display = "block"
+            document.querySelector(".spinner-wrapper").style.display = "none"
+            
+          }
+        });
+      });
+    });
+  </script>
+</body>
+{% endblock %}

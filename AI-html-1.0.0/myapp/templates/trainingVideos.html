@@ -1,0 +1,48 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<body>
+    <link href="{% static 'css/pricing.css' %}" rel="stylesheet">
+
+    <div class="pricing-title-wrapper">
+    	<h1 class="text-white mb-4 animated text-center ctm-text ft-s-ct">Your<span>AI co-pilot </span>for video creation</h1>
+    </div>
+
+    <div class="worko-tabs">
+  
+        <input class="state" type="radio" title="tab-one" name="tabs-state" id="tab-one" checked />
+        <input class="state" type="radio" title="tab-two" name="tabs-state" id="tab-two" />
+    
+        <div class="tabs flex-tabs">
+              
+            <div id="tab-one-panel" class="panel active">
+                {% comment %} Training {% endcomment %}
+                <div class="card-one">
+                    <div class="card-section-one">
+                        <h1>Training Videos</h1>
+                        <h1>{{ basePathofLive }}</h1>
+                        <p class="plan-short-detail">For Enhancing Knowledge</p>
+                        <h1>$1<span class="sm-ft"></span></h1>
+                        <div class="pd-tp-bt"></div>
+                    {% if request.session.email %}
+                    <form enctype="multipart/form-data" method="post" name="training-pricing">
+                        {% csrf_token %}
+                        <input type="hidden" name="price_id" value="price_1PY67eF10zBxA9lhAen8BGu2">
+                        <button type="submit" class="btn btn-success plan-btn" href="{% url 'trainingVideos' %}" data-bind-href="trainingVideos">Get Training Videos</button>
+                    </form>
+                    {% else %}
+                        <a href="{% url 'login' %}"><button type="submit" class="btn btn-success plan-btn" data-bind-href="trainingVideos">Get Max</button> </a>
+                    {% endif %}
+                    </div>
+                    <div class="card-section-two">
+                        <div class="card-section-two-wrapper">
+                        <p><i class="fa-solid fa-check"></i> Enhancing Knowledge of Earnings</p>
+                        </div>
+                    </div>
+			    </div>
+			{% comment %}End Training {% endcomment %}
+            </div>
+        </div>
+    </div>    
+</body>
+{% endblock %}

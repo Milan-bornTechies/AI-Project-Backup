@@ -1,0 +1,130 @@
+body:has(.text-speech) {
+    background-image: url("../img/text-to-speech-bg.png");
+    background-size: cover;
+}
+
+.text-speech .text-section {
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text-speech .text-section .text-about- {
+    color: #b5afaf;
+    max-width: 500px;
+    margin-bottom: 40px;
+}
+
+.text-speech .text-section .bg-image {
+    background-image: url("../img/audio-icon.svg");
+    background-size: contain;
+    width: 270px;
+    height: 90px;
+    position: relative;
+    margin-top: -15px;
+}
+
+.text-speech .text-section .bg-image h1 {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+}
+
+.text-speech .row {
+    padding: 50px 15px;
+    /*  */
+    /* background: rgba(145, 140, 168, 0.3); */
+    background: rgb(128 118 153 / 30%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px 15px;
+}
+
+.text-speech .col-md-6 {
+    margin: 0 auto;
+    /* max-width: 800px; */
+    width: 100%;
+}
+
+.text-speech .col-md-6 #textToSpeechForm .form-control {
+    padding: 1rem 0.75rem;
+    min-height: unset;
+    line-height: normal;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    height: 130px;
+    color: white !important;
+}
+
+.text-speech .col-md-6 #textToSpeechForm .form-control:focus {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.text-speech .col-md-6 #textToSpeechForm .form-control::-webkit-scrollbar {
+    width: 7px;
+}
+
+.text-speech .col-md-6 #textToSpeechForm .form-control::-webkit-scrollbar-track {
+    background: #0E0726;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.text-speech .col-md-6 #textToSpeechForm .form-control::-webkit-scrollbar-thumb {
+    background: rgba(209, 204, 223, 0.3);
+    border-radius: 5px;
+}
+
+.text-speech audio {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+.text-speech .col-md-6 #textToSpeechForm {
+    text-align: end;
+}
+
+.text-speech .col-md-6 #textToSpeechForm .form-btn-for-text {
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #AB2079;
+    border-color: #AB2079;
+}
+
+.text-speech .col-md-6 .heading-text {
+    font-size: 16px;
+    color: #555;
+    font-weight: 400 !important;
+}
+
+body:has(.text-speech) .footer .wow.fadeIn .copyright .row .text-dark,
+body:has(.text-speech) .footer .container.py-5 .row.g-5 .wow.fadeIn p,
+body:has(.text-speech) .footer .container.py-5 .row.g-5 .wow.fadeIn a,
+body:has(.text-speech) .footer .container.py-5 .row.g-5 .wow.fadeIn .mb-4 {
+    color: white !important;
+}
+
+body:has(.text-speech) .container-fluid.sticky-top.bg-primary.shadow-sm {
+    background-color: #190f3d !important;
+}
+
+@media only screen and (max-width: 768px) {
+    .text-speech .row {
+        max-width: 560px;
+    }
+
+    .text-speech .text-section .bg-image {
+        height: 65px;
+        width: 210px;
+    }
+
+    .text-speech .text-section .bg-image h1 {
+        top: 10px;
+    }
+}

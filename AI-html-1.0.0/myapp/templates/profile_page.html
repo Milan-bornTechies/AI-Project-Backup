@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<style>
+    body {
+        margin: 0;
+        font-family: Inter, sans-serif;
+        background-color: #141414;
+    }
+    .tabbing-main {
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        width: 240px;
+        min-width: 240px;
+        padding: 20px 12px;
+        gap: 12px;
+    }
+    
+    .tabbing-data {
+        {% comment %} width: 100%; {% endcomment %}
+        overflow: hidden;
+    }
+
+    .tabbing-wrapper {
+        padding: 28px 16px 16px 16px;
+        width: 720px;
+        margin: 0 auto;
+    }
+
+    /* Style the buttons inside the tab */
+    .tab button {
+        display: flex;
+        align-items: center;
+        height: 36px;       
+        border-radius: 6px;
+        padding: 8px;
+        outline: none;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 600;
+        border: none;
+        color: #ffffff73;
+        background: none;
+    }
+    
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+        color: #ffffffbf;
+        background-color: #2d2d2f;
+    }
+    
+    /* Create an active/current tablink class */
+    .tab button.active {
+        color: #ffffffbf;
+        background-color: #2d2d2f;
+    }
+    
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        gap: 15px;
+        align-items: center;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #ffffff14;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .tabcontent .heading {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+    .tabcontent h1 {
+        color :#ffffff8c;
+        text-transform: capitalize;
+        margin: 0;
+        font-size: 14px;
+        font-weight: normal;
+    }
+    .tabcontent ul {
+        margin: 0;
+        padding-left: 0;
+    }
+    .tabcontent ul li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .tabcontent .content {
+        background: #2d2d2f;
+        border-radius: 10px;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    @media only screen and (max-width: 500px) {
+        .tabbing-main {
+            display: block;
+        }
+        .tabbing-main .tab {
+            width: auto;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .tab button {
+            font-size: 11px;
+        }
+    }
+    @media only screen and (max-width: 768px) {
+        .tabcontent {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+    }
+    @media only screen and (max-width: 1024px) {
+        .tabbing-wrapper {
+            width: auto;
+        }
+    }
+    .grid-child.particular-user-info {
+        width: 95%;
+        margin: 0 auto;
+        box-shadow: 0px 2px 9px 3px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+      }
+      .grid-child.particular-user-info table {
+        width: 100%;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        overflow: hidden;
+      }
+      .grid-child.particular-user-info table tr td {
+        padding: 10px 20px;
+        display: flex;
+        border-bottom: 1px solid lightgray;
+      }
+
+
+      {% comment %} custom css by mohit {% endcomment %}
+
+      .input-main {
+        display: flex;
+        gap: 12px;
+    }       
+    .input-sub{
+        width: 100%;
+        height: 100%;
+    }
+    .input-sub > input {
+        background-color: hsla(210, 1%, 27%, 1);
+        height: 36px;
+        border-radius: 8px;
+        padding: 0px 12px;
+        width: 100%;
+        color: hsla(0, 0%, 100%, 0.55);
+        font-size: 15px;
+    }
+    .input-sub > input:focus {
+        outline: 2px solid hsla(215, 89%, 46%, 1);;
+    }
+    .input-button{
+        color: hsla(0, 0%, 100%, 0.55);
+        background-color: hsla(215, 77%, 63%, 1);
+        width: 72px;
+        height: 36px;
+        padding: 0px 12px;
+        border-radius: 8px;
+    }
+    .input-button-save{
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 700;   
+    }
+    .go-back-main{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .go-back-svg{
+        margin: 2px 5px 2px 2px;
+    }
+    .go-back-to-workspace {
+        position: absolute;
+        top: 80%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+</head>
+<body>
+<div class="tabbing-main">
+<div class="tab">
+    <button class="tablinks active" onclick="tabBing(event, 'data-name')">User Details</button>
+    <button class="tablinks" onclick="tabBing(event, 'data-plan')">Subscribtion Information</button>
+    <button class="tablinks" onclick="tabBing(event, 'data-history')">User History</button>
+</div>
+
+<div class="tabbing-data">
+    <div class="tabbing-wrapper">
+        <div id="data-name" class="tabcontent" style="display: grid;">
+            <div class="content">
+            <span class="heading">Name:</span>
+            <div class="input-main username-input-main">
+                <div class="input-sub username-input">
+                    <input id="username-input" placeholder="User name" type="text" maxlength="256" name="username" autocomplete="off" class="" value="{{ name }}">
+                </div>
+                <button class="input-button username-button" disabled>
+                    <div class="input-button-save username-button-save">Save</div>
+                </button>
+            </div>
+            </div>
+            <div class="content">
+            <span class="heading">workspace name:</span>
+            <div class="input-main workspace-input-main">
+                <div class="input-sub workspace-input">
+                    <input id="workspace-input" placeholder="User name" type="text" maxlength="256" name="username" autocomplete="off" class="" value="{{ workspace_name }}">
+                </div>
+                <button class="input-button workspace-button" disabled>
+                    <div class="input-button-save workspace-button-save">Save</div>
+                </button>
+            </div>
+            </div>
+        </div>
+
+            <div id="data-plan" class="tabcontent">
+
+                <div class="content">
+                <span class="heading">Plan name:</span>
+                <h1>{{ plan_name }}</h1>
+                </div>
+
+                <div class="content">
+                    <span class="heading">Price of Plan:</span>
+                <h1>{{ price_of_plan }}</h1>
+                </div>
+
+                <div class="content">
+                    <span class="heading">Date of Created:</span>
+                <h1>{{ date_of_created }}</h1>
+                </div>
+
+                <div class="content">
+                    <span class="heading">End Date:</span>
+                <h1>{{ end_date }}</h1>
+                </div>
+                
+            </div>
+
+            <div id="data-history" class="tabcontent">
+                {% if user_work_space_entries %}
+                <div class="content">
+                <h1 class="heading">User's WorkSpace History</h1>
+                <ul>
+                    {% for entry in user_work_space_entries %}
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 18 19" fill="#FFFFFF"
+                        xmlns="http://www.w3.org/2000/svg" fill-opacity="0.5"
+                        style="height: 16px; width: 16px;">
+                        <path
+                        d="M8.20312 5.26172C8.42965 5.26172 8.61328 5.44535 8.61328 5.67188V9.63672H11.4844C11.7109 9.63672 11.8945 9.82035 11.8945 10.0469C11.8945 10.2734 11.7109 10.457 11.4844 10.457H8.20312C7.9766 10.457 7.79297 10.2734 7.79297 10.0469V5.67188C7.79297 5.44535 7.9766 5.26172 8.20312 5.26172Z"
+                        fill="white"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M1.23047 9.5C1.23047 5.34708 4.59708 1.98047 8.75 1.98047C12.9029 1.98047 16.2695 5.34708 16.2695 9.5C16.2695 13.6529 12.9029 17.0195 8.75 17.0195C4.59708 17.0195 1.23047 13.6529 1.23047 9.5ZM8.75 2.80078C5.05012 2.80078 2.05078 5.80012 2.05078 9.5C2.05078 13.1999 5.05012 16.1992 8.75 16.1992C12.4499 16.1992 15.4492 13.1999 15.4492 9.5C15.4492 5.80012 12.4499 2.80078 8.75 2.80078Z"
+                        fill="white"></path>
+                        </svg>
+                        <h1><div style="color: #ffffff8c; text-decoration: none;" class="user-videourl-name" data-videoUrl="{% if entry.edited_video_url %}{{ entry.edited_video_url }}{% else %}{{ entry.video_url }}{% endif %}"> {{ entry.message }}</div></h1>
+                    </li>
+                    {% endfor %}
+                </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div
+                class="grid-child modal fade"
+                id="videoModal"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="videoModalLabel"
+                aria-hidden="true"
+            >
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="videoModalLabel">Video Popup</h5>
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                    <video controls autoplay style="width: 100%">
+                        Your browser does not support the video tag.
+                    </video>
+                    </div>
+                    <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="go-back-to-workspace">
+    <a href="{% url 'work_space' pk=user.pk %}">
+    <span class="go-back-main">
+        <span class="go-back-svg"><?xml version="1.0" encoding="iso-8859-1"?><svg height="19px" width="19px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 38.273 38.273" xml:space="preserve">
+            <g>
+                <path style="fill:#007bff;" d="M20.621,10.484V5.84c0-0.808-0.458-1.548-1.181-1.909c-0.722-0.359-1.589-0.279-2.236,0.206
+                    l-9.486,7.147c-0.677,0.292-1.117,0.67-1.401,1.058l-5.468,4.119C0.312,16.866-0.003,17.501,0,18.173
+                    c0.002,0.673,0.322,1.305,0.862,1.706l16.355,12.133c0.646,0.48,1.51,0.554,2.23,0.191c0.72-0.362,1.174-1.1,1.174-1.905v-5.517
+                    c0.013,0,0.025,0,0.038,0c3.842,0,10.687,1.089,13.366,8.386c0.311,0.846,1.116,1.397,2.001,1.397c0.079,0,0.157-0.004,0.236-0.013
+                    c0.975-0.108,1.751-0.868,1.88-1.84c0.052-0.394,1.208-9.682-4.461-16.23C30.621,12.948,26.235,10.935,20.621,10.484z
+                    M20.659,20.515c-1.443,0-2.379,0.132-2.482,0.146c-1.046,0.154-1.822,1.053-1.822,2.111v3.287l-10.66-7.907l3.555-2.678
+                    c0.136-0.104,0.259-0.222,0.365-0.351c0.155-0.068,0.301-0.152,0.437-0.254l6.303-4.75v2.401c0,1.168,0.939,2.119,2.108,2.134
+                    c5.345,0.063,9.374,1.61,11.975,4.6c1.442,1.658,2.314,3.602,2.835,5.469C28.923,21.038,23.424,20.515,20.659,20.515z"/>
+            </g>
+            </svg>
+        </span>
+        <span class="go-back-text">
+           Go back to workspace
+        </span>
+    </span></a>
+</div>
+<script>
+    function tabBing(evt, dataItem) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(dataItem).style.display = "grid";
+        evt.currentTarget.className += " active";
+    }
+</script>
+<script>
+    var messageElements = $(".user-videourl-name");
+
+    // Add click event listener to each message element
+    messageElements.on("click", function () {
+        // Get the video_url associated with the clicked message
+        var videoUrl = $(this).attr("data-videoUrl");
+
+        // Open a Bootstrap modal and create a video element with autoplay
+        $("#videoModal").modal("show");
+        $("#videoModal video").attr("src", videoUrl);
+    });
+
+    $(document).ready(function () {
+        $('#videoModal').on('hidden.bs.modal', function (e) {
+          $('#videoModal video').get(0).pause();
+        });
+      });
+
+    $(document).ready(function() {
+        $('#username-input').on('input', function() {
+            $('.username-button').prop('disabled', false);
+        });
+
+        $('.username-button').click(function() {
+            var newName = $('#username-input').val();
+            $.ajax({
+                url: '{% url "update_username" %}',
+                method: 'POST',
+                data: {
+                    'name': newName,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    console.log('Name updated successfully');
+                    $('.username-button').prop('disabled', true);
+                },
+                error: function(response) {
+                    console.log('Error updating name');
+                }
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        $('#workspace-input').on('input', function() {
+            $('.workspace-button').prop('disabled', false);
+        });
+
+        $('.workspace-button').click(function() {
+            var newName = $('#workspace-input').val();
+            $.ajax({
+                url: '{% url "update_workspace" %}',
+                method: 'POST',
+                data: {
+                    'name': newName,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    console.log('Name updated successfully');
+                    $('.workspace-button').prop('disabled', true);
+                },
+                error: function(response) {
+                    console.log('Error updating name');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

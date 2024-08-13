@@ -1,0 +1,93 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/text_to_speech.css' %}" rel="stylesheet">
+<div class="container text-speech py-5">
+    <div class="text-section">
+        <h1 class="white-text">
+            AI Powered,
+        </h1>
+        <div class="white-text bg-image">
+            <h1>Human Like.</h1>
+        </div>
+        <p class="text-about-">Create natural sounding Text To Speech using our latest AI Voice generater.Accelerate video ptodiction using our Ai Video creater and Text Converter.</p>
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            {% comment %} <h2 class="heading-text">Text to Speech</h2> {% endcomment %}
+            <form id="textToSpeechForm">
+                <textarea id="inputText" class="form-control" placeholder="Type the text here and listen to the magic work..." rows="4"></textarea>
+                <button type="submit" class="btn btn-primary mt-3 form-btn-for-text">Convert to Speech</button>
+            </form>
+            <div id="outputAudio" class="mt-4">
+                <!-- Audio output will be displayed here -->
+            </div>
+            <div class="spinner-wrapper" style="display:none; text-align:center;">
+               <div class="spinner-border text-danger form-spinner" role="status">
+                 <span class="visually-hidden">Loading...</span>
+               </div>
+               <div class="progress mt-2" style="height: 20px;">
+                 <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;">0%</div>
+               </div>
+            </div>  
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#textToSpeechForm').on('submit', function(event) {
+        event.preventDefault();
+
+        document.querySelector(".form-btn-for-text").style.display = "none"
+        document.querySelector(".spinner-wrapper").style.display = "block";
+
+        const updateProgressBar = (percentage) => {
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+          };
+
+          let progress = 0;
+          const interval = setInterval(() => {
+            if (progress < 95) {
+              progress += 5;
+              updateProgressBar(progress);
+            } else {
+              clearInterval(interval);
+            }
+          }, 1000);
+        
+        var text = $('#inputText').val();
+        var pk = "{{ pk }}"; // Pass the 'pk' variable from Django context
+        
+        $.ajax({
+            type: 'POST',
+            url: '{% url "text_to_speech" pk %}', // Replace with your URL name for the view
+            data: {
+                'text': text,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                clearInterval(interval);
+                updateProgressBar(100);
+                $('#outputAudio').html('<audio controls><source src="' + response.audio_url + '" type="audio/mpeg"></audio>');
+                document.querySelector(".form-btn-for-text").style.display = "block"
+                document.querySelector(".spinner-wrapper").style.display = "none";
+                document.querySelector(".form-spinner").style.display = "none"
+            },
+            error: function(xhr, errmsg, err) {
+                clearInterval(interval);
+                console.log(xhr.status + ": " + xhr.responseText);
+                alert("something went Wrong")
+                document.querySelector(".form-btn-for-text").style.display = "block"
+                document.querySelector(".spinner-wrapper").style.display = "none";
+                document.querySelector(".form-spinner").style.display = "none"
+
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

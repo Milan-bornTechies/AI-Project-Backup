@@ -1,0 +1,155 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+ {% block content %}
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link href="{% static 'css/post-list.css' %}" rel="stylesheet" />
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<div class="heading-1 post_link">
+  <p class="text-center fs-1 fw-bold">Clipgenie Blog.</p>
+</div>
+<div class="heading-2 post_link">
+  <p class="text-center fs-1 fw-bold text-primary">All about video.</p>
+</div>
+<div class="trending-post-link">
+<div class="container mx-auto p-6" style= "margin:20px">
+  <h2 class="text-3xl font-bold mb-6 text-center">Top Trending Posts 🔥</h2>
+  <div class="blog-slider-container">
+    <div class="blog-slider-wrapper owl-carousel owl-theme">
+      {% for post in posts %}
+      <div class="bg-card rounded-lg p-4 shadow-lg">
+        <a href="{% url 'post_detail' pk=post.pk %}">
+          {% if post.image %}
+          <div class="post-img-wrapper">
+            <img
+              style ="width: 380px;height: 450px;"
+              src="{{ post.image.url }}"
+              alt="{{ post.title }}"
+              class="rounded-lg mb-4"
+            />
+          </div>
+          {% endif %}
+          <h2 class="text-xl font-semibold" >{{ post.title }}</h2>
+          <p class="text-muted-foreground mt-2">
+            <small
+              >By {{ post.author.username }} on {{ post.published_date }}</small
+            >
+          </p>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+<div class="platform-container">
+<div class="container mx-auto p-6">
+  <h2 class="text-3xl font-bold mb-6 text-center">Platforms</h2>
+  <div class="platform-slider-container">
+    <div class="platform-slider-wrapper owl-carousel owl-theme">
+      {% for platform in platforms %}
+  <div id="platform-card-{{ forloop.index }}" class="bg-card rounded-lg p-4 shadow-lg">
+    <a href="{% url 'platform_detail' pk=platform.pk %}">
+      <div class="text-wrapper">
+        <h2 class="text-xl font-semibold">{{ platform.title }}</h2>
+        <div>{{ platform.content|safe }}</div>
+      </div>
+      {% if platform.image %}
+        <div class="image-wrapper mt-4">
+          <img
+            src="{{ platform.image.url }}"
+            alt="{{ platform.title }}"
+            class="rounded-lg"
+          />
+        </div>
+      {% endif %}
+    </a>
+  </div>
+{% endfor %}
+
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  $('.blog-slider-wrapper').owlCarousel({
+                center: true,
+                items: 3,
+                loop: true,
+                margin: 45,
+                nav: true,
+                dots: false,
+                autoplay: false,
+                autoplayHoverPause: false,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 2
+                    },
+                    1000: {
+                        items: 3
+                    }
+                }
+            });
+  
+    var owl = $('.platform-slider-wrapper').owlCarousel({
+                center: true,
+                items: 3,
+                loop: true,
+                margin: 45,
+                nav: false,
+                dots: false,
+                autoplay: false,
+                autoplayHoverPause: false,
+                URLhashListener:true,
+                autoplayHoverPause:true,
+                startPosition: 'URLHash',
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 2
+                    },
+                    1000: {
+                        items: 3
+                    }
+                }
+            });
+    let getSliderEle = document.querySelectorAll(".platform-slider-container .owl-item");
+
+getSliderEle.forEach((ele, index) => {
+    ele.classList.add(`index-${index}`);
+});
+     
+</script>
+<!-- <script>
+  const swiper = new Swiper(".swiper-container", {
+    slidesPerView: 3,
+    spaceBetween: 20,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    breakpoints: {
+      640: {
+        slidesPerView: 1,
+        spaceBetween: 10,
+      },
+      768: {
+        slidesPerView: 2,
+        spaceBetween: 15,
+      },
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 20,
+      },
+    },
+  });
+</script> -->
+{% endblock %}

@@ -1,0 +1,182 @@
+#training-main .container-video {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.use-name {
+  text-transform: uppercase;
+  text-align: end;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  color: darkslateblue !important;
+  font-size: 24px;
+}
+#training-main .folder {
+  flex: 1 0 21%; /* Responsive */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  margin: 10px;
+}
+#training-main .folder-icon {
+  width: 100%;
+  padding-top: 75%; /* Maintain aspect ratio */
+  background-color: #d3e4ff;
+  border-radius: 10px;
+  position: relative;
+}
+#training-main .folder-icon::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: calc(100% - 20px);
+  height: 20px;
+  background-color: #99c2ff;
+  border-radius: 5px 5px 0 0;
+}
+#training-main .folder-name {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+#training-main .video-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+#training-main video {
+  display: block;
+  margin: 20px auto;
+}
+#training-main .back-button {
+  margin: 20px;
+  cursor: pointer;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: max-content;
+  padding: 15px 25px;
+  background: darkslateblue;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+.container.page-wrapper {
+  display: block !important;
+  margin-top: 50px;
+}
+#training-main .video-container #main-video {
+  width: 100%;
+  max-width: 960px;
+  margin-bottom: 20px;
+}
+#training-main .video-container #main-video .video-wrapper {
+  width: 100%;
+  border-radius: 10px;
+}
+#training-main .video-container #main-video .video-wrapper img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  cursor: pointer;
+}
+#training-main .video-container #main-video .video-title {
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+#training-main .video-container #side-videos {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid #ddd;
+}
+#training-main .video-container #side-videos .video-wrapper {
+  width: 200px;
+  flex-shrink: 0;
+  border-radius: 10px;
+}
+#training-main .video-container #side-videos .video-wrapper img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  cursor: pointer;
+}
+#training-main .video-container #side-videos .video-title {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid rgba(72, 61, 139, 0.5);
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  display: none; /* Initially hide the loader */
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+   100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@media only screen and (max-width: 991px) {
+  #training-main .video-container #main-video .video-title {
+      font-size: 20px;
+  }
+  #training-main .video-container #side-videos .video-wrapper {
+      width: 150px;
+  }
+  #training-main .video-container #side-videos .video-title {
+      font-size: 12px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #training-main .container-video {
+      gap: 10px;
+  }
+  #training-main .video-container #side-videos {
+      gap: 10px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  #training-main .video-container #side-videos .video-wrapper {
+      width: 120px;
+  }
+  #training-main .video-container #side-videos .video-title {
+      font-size: 10px;
+  }
+  #training-main .container-video {
+      gap: 5px;
+  }
+}
+@media only screen and (max-width: 425px) {
+  #training-main .video-container #side-videos .video-wrapper {
+      width: 100px;
+  }
+}

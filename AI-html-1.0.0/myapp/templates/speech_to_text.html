@@ -1,0 +1,56 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<link href={% static "css/speech_to_text.css" %} rel="stylesheet">
+<body class="speech-to-text">
+  <div class="text-section py-5">
+    <h1 class="white-text">
+        Empower your Voice,
+    </h1>
+    <h1>With our AI-Powered words</h1>
+    <p class="text-about-">Capture Every Word with Our AI-Powered Audio-to-Text Converter.Advanced Audio Transcription Made Easy.</p>
+  </div>  
+  <div class="row spc-text-row">
+    <div class="col-md-6 offset-md-3">
+      <form id="audioForm" enctype="multipart/form-data">
+        <div class="input-file">      
+        <input type="file" id="audioFile" name="audioFile" accept="audio/*" required>
+        <div class="file-icon">
+          <img src="{% static "img/upload.svg" %}" >
+        </div>
+      </div>
+        <button type="submit">Upload</button>
+      </form>
+    </div>
+  <div class="textarea-wrapper">
+    <textarea id="resultText" rows="10" cols="50" placeholder="Transcribed text will appear here..."></textarea>
+  </div>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#audioForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+          url: "{% url 'upload_audio' %}",  // Ensure this URL matches your Django URL pattern
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            $('#resultText').val(response.transcription);
+          },
+          error: function(response) {
+            console.error('Error:', response);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+{% endblock %}

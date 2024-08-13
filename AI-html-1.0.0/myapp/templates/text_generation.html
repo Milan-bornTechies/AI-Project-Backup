@@ -1,0 +1,105 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/text_generation.css' %}" rel="stylesheet">
+
+<body id="text-generation-main" class="text-generator">
+  <div class="text-section py-5">
+    <h1 class="white-text">
+        AI Powered,
+    </h1>
+    <h1>Paraphrasign Tools to improve your writing</h1>
+    <p class="text-about-">Best Ai writer for Real-time content Creation. help you create real-time data-driven content that rank high. Say goodbye to writer's block and say hello to high-quality content that ranks. </p>
+  </div> 
+  <div class="row text-gen-row">
+    <div class="my-container col-md-6 offset-md-3">
+      <form id="text-generation-form" method="post" action="{% url 'text_generation' pk=user.pk %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+          <div class="col-12 input-txt-to-create-vid">
+            <div class="form-floating">
+              <textarea class="form-control" placeholder="Leave a text here" name="message" id="message"></textarea>
+              <label for="message">Type the text here and See the magic work...</label>
+            </div>
+          </div>
+          <div class="col-12 input-txt-to-create-vid form-btn-for-text mt-3" style="text-align: right;">
+            <button class="btn btn-primary btn-to-mrg-vid" type="submit" disabled>Generate Text</button>
+          </div>
+          <div class="spinner-wrapper" style="display:none; text-align:center;">
+            <div class="spinner-border text-danger form-spinner" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="progress mt-2" style="height: 20px;">
+              <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;">0%</div>
+            </div>
+          </div>     
+        </div>      
+      </form>
+      
+      <div class="mt-4 result-wrapper">
+        <div class="generated-tex-title">AI generated story</div>
+        <textarea id="w3review" name="w3review" rows="4" cols="50" style = "display:none"></textarea>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $('#text-generation-form').on('submit', function(e){
+            e.preventDefault();
+
+            document.querySelector(".form-btn-for-text").style.display = "none";
+            document.querySelector(".spinner-wrapper").style.display = "block";
+
+            const updateProgressBar = (percentage) => {
+              const progressBar = document.getElementById('progress-bar');
+              progressBar.style.width = percentage + '%';
+              progressBar.textContent = percentage + '%';
+            };
+
+            let progress = 0;
+            const interval = setInterval(() => {
+              if (progress < 95) {
+                progress += 5;
+                updateProgressBar(progress);
+              } else {
+                clearInterval(interval);
+              }
+            }, 1500);
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(response){
+                  clearInterval(interval);
+                  updateProgressBar(100);
+                  document.querySelector(".form-btn-for-text").style.display = "block";
+                  document.querySelector(".spinner-wrapper").style.display = "none";
+                  document.querySelector("#w3review").style.display = "block"
+                  $('#w3review').val(response.response_text);
+                },
+                error: function(response){
+                  clearInterval(interval);
+                  alert('An error occurred. Please try again.');
+                  document.querySelector(".form-btn-for-text").style.display = "block";
+                  document.querySelector(".spinner-wrapper").style.display = "none";
+                }
+            });
+        });
+    });
+
+    {% comment %} To Disable Generate Button {% endcomment %}
+    document.querySelector('.form-control').addEventListener('input', () => {
+      const inputField = document.querySelector('.form-control');
+      const button = document.querySelector('.btn-to-mrg-vid');
+      if (inputField.value.trim().length >= 3) {
+          button.removeAttribute("disabled");
+      } else {
+          button.setAttribute("disabled", true);
+      }
+    });
+    {% comment %} End Disable Generate Button {% endcomment %}
+  </script>
+</body>
+{% endblock %}

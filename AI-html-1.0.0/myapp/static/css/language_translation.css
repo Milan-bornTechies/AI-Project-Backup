@@ -1,0 +1,82 @@
+.language-translater {
+	background-image: linear-gradient(to right bottom, #dbe2f2, #d8e6f3, #d8eaf1, #dbeeef, #e0f0ed, #dfece5, #e0e8dd, #e2e3d7, #e0d6c9, #dec9c0, #d9bdbd, #cdb2be);
+	.container-center {
+		flex-direction: column;
+		.text-section {
+        color: #6e4251;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 1rem !important;
+    }
+    .text-section h1{
+        color: #6e4251 !important;
+    }
+    .text-section .text-about- {
+        color: #985461;
+        max-width: 500px;
+        margin-bottom: 40px;
+    }
+    .language-row {
+        background: #FFF;
+        border-radius: 15px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 30px 15px;
+    }
+
+    .language-row .col-md-6.offset-md-3 {
+        margin: 0 auto;
+        width: 100%;
+        margin-bottom: 25px;
+    }
+    .language-row .col-md-6.offset-md-3 #text-generation-form .input-txt-to-create-vid{
+    	margin-bottom: 20px;
+    }
+    .language-row .col-md-6.offset-md-3 #text-generation-form .input-txt-to-create-vid .form-floating textarea.form-control{
+	    border: 1px solid;
+	    height: 150px;
+        background-image:  url("../img/speech-to-text-bg.png");
+        border: none;
+        color: #6e4251 !important;
+    }
+    .language-row .col-md-6.offset-md-3 #text-generation-form .input-txt-to-create-vid .form-floating select.form-control{
+    	width: 300px;
+    	border-radius: 5px;
+    	color: #6e4251 !important;
+    }
+    .language-row .col-md-6.offset-md-3 #text-generation-form .form-btn-for-text .btn-to-mrg-vid {
+    	background: rgb(247,226,200);
+	    border-color: rgb(217,234,244);
+	    color: #6e4251 !important;
+	    font-weight: 600;
+	    border-radius: 5px;
+	    padding: 6px 20px;
+    }
+    .language-row .col-md-6.offset-md-3 #translationResult{
+    	background: rgb(190 215 220 / 40%);
+	    background-repeat: no-repeat;
+	    border: none;
+	    border-radius: 5px;
+	    width: 100%;
+	    height: 300px;
+	    padding: 10px 20px;
+	    color: #6e4251 !important;
+    }
+    @media only screen and (max-width: 768px) {
+    	.language-row{
+    		max-width: 560px;
+    	}
+    }
+    @media only screen and (max-width: 560px) {
+    	.language-row{
+    		margin: 0 10px;
+    	}
+    }
+	}
+	.container-fluid.sticky-top.bg-primary.shadow-sm{
+    	background: #D8E7F2 !important;
+    }
+    
+}

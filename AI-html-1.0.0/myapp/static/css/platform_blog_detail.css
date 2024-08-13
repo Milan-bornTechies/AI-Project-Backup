@@ -1,0 +1,84 @@
+.platform_blog_detail .col-md-8 {
+	width: 85%;
+    margin: auto;
+    max-width: 1320px;
+}
+.platform_blog_detail .col-md-8 img {
+	width: 100%;
+	height: 100%;
+	border-radius: 30px;
+}
+.platform_blog_detail .col-md-8 .blog-title {
+/*	width: 85%;*/
+    font-size: 64px;
+    margin: 50px auto;
+}
+.platform_blog_detail .col-md-8 .text-muted {
+	font-size: 14px;
+}
+.platform_blog_detail .col-md-8 .post-container-wrapper {
+	display: flex;
+    width: 100%;
+    gap: 40px;
+}
+.platform_blog_detail .col-md-8 .post-container-wrapper .post-content-text {
+	font-size: 24px;
+    color: #0f73ff;
+    font-weight: 600;
+    max-width: 25%;
+}
+.platform_blog_detail .col-md-8 .post-container-wrapper .post-content {
+	width: 75%;
+}
+.platform_blog_detail .col-md-8 .post-container-wrapper .post-content h1 {
+	color: #2c3e50 !important;
+	text-align: left !important;
+}
+.platform_blog_detail .col-md-8 .post-container-wrapper .post-content h3,
+.platform_blog_detail .col-md-8 .post-container-wrapper .post-content h2 {
+	color: #000 !important;
+	opacity: 0.9;
+	margin: 17px 0;
+}
+.platform_blog_detail .col-md-8 .post-container-wrapper .post-content p {
+	margin: 0;
+	font-size: 22px;
+}
+.platform_blog_detail .col-md-8 .post-container-wrapper .post-content ul {
+    margin-top: 15px;
+}
+.platform_blog_detail .col-md-8 .post-container-wrapper .post-content ul li {
+	line-height: 34px;
+	color: #0f73ff;
+    font-size: 24px;
+}
+.platform_blog_detail .col-md-8 .btn.btn-secondary.mt-4 {
+	padding: 10px 20px;
+    border-radius: 5px;
+    color: #FFF;
+    font-weight: 600;
+    background: darkslateblue;
+    border: none;
+}
+@media only screen and (max-width: 768px) {
+	.platform_blog_detail .col-md-8 .blog-title {
+		font-size: 32px;
+    	margin: 30px auto;
+	}
+	.platform_blog_detail .col-md-8 .post-container-wrapper {
+	    flex-direction: column;
+    	gap: 20px;
+	}
+	.platform_blog_detail .col-md-8 .post-container-wrapper .post-content-text {
+		max-width: 100%;
+	}
+	.platform_blog_detail .col-md-8 .post-container-wrapper .post-content {
+		width: 100%;
+	}
+	.platform_blog_detail .col-md-8 .post-container-wrapper .post-content ul li {
+		font-size: 22px;
+	}
+	.platform_blog_detail .col-md-8 .post-container-wrapper .post-content p {
+		font-size: 16px;
+	}
+}

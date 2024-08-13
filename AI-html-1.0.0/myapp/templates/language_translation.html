@@ -1,0 +1,210 @@
+{% extends 'header.html' %} 
+{% load static %} 
+{% block content %}
+<link href={% static "css/language_translation.css" %} rel="stylesheet">
+<body class="language-translater">
+  <div class="container-center">
+    <div class="text-section py-5">
+    <h1 class="white-text">
+        We open up,
+    </h1>
+    <h1>Language to everyone</h1>
+    <p class="text-about-">Professional translation services made easy. Crafted by expert humans, powered by technology, efficiency delivered.</p>
+  </div> 
+  <div class="row language-row">
+  <div class="col-md-6 offset-md-3">
+    <form id="text-generation-form" method="post" action="{% url 'language_translation' pk=user.pk %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div>
+        <div class="col-12 input-txt-to-create-vid">
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a text here" name="message" id="message"></textarea>
+            <label for="message">Give Me A Text...</label>
+          </div>
+        </div>
+        
+        <div class="col-12 input-txt-to-create-vid">
+          <div class="form-floating">
+            <select class="form-control" name="target_language" id="target_language">
+              <option value="en">English</option>
+              <option value="zh">Mandarin Chinese</option>
+              <option value="es">Spanish</option>
+              <option value="hi">Hindi</option>
+              <option value="ar">Arabic</option>
+              <option value="bn">Bengali</option>
+              <option value="pt">Portuguese</option>
+              <option value="ru">Russian</option>
+              <option value="ja">Japanese</option>
+              <option value="pnb">Western Punjabi</option>
+              <option value="mr">Marathi</option>
+              <option value="te">Telugu</option>
+              <option value="wuu">Wu Chinese</option>
+              <option value="tr">Turkish</option>
+              <option value="ko">Korean</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="vi">Vietnamese</option>
+              <option value="ta">Tamil</option>
+              <option value="yue">Yue Chinese (Cantonese)</option>
+              <option value="ur">Urdu</option>
+              <option value="jv">Javanese</option>
+              <option value="it">Italian</option>
+              <option value="arz">Egyptian Arabic</option>
+              <option value="gu">Gujarati</option>
+              <option value="fa">Iranian Persian</option>
+              <option value="bho">Bhojpuri</option>
+              <option value="nan">Southern Min</option>
+              <option value="hak">Hakka Chinese</option>
+              <option value="cjy">Jin Chinese</option>
+              <option value="ha">Hausa</option>
+              <option value="kn">Kannada</option>
+              <option value="id">Indonesian</option>
+              <option value="pl">Polish</option>
+              <option value="yo">Yoruba</option>
+              <option value="hsn">Xiang Chinese</option>
+              <option value="ml">Malayalam</option>
+              <option value="or">Odia</option>
+              <option value="mai">Maithili</option>
+              <option value="my">Burmese</option>
+              <option value="pa">Eastern Punjabi</option>
+              <option value="su">Sundanese</option>
+              <option value="apd">Sudanese Arabic</option>
+              <option value="arq">Algerian Arabic</option>
+              <option value="ary">Moroccan Arabic</option>
+              <option value="uk">Ukrainian</option>
+              <option value="ig">Igbo</option>
+              <option value="uz">Northern Uzbek</option>
+              <option value="sd">Sindhi</option>
+              <option value="apc">North Levantine Arabic</option>
+              <option value="uk">Ukrainian</option>
+              <option value="he">Hebrew</option>
+              <option value="hu">Hungarian</option>
+              <option value="el">Greek</option>
+              <option value="sv">Swedish</option>
+              <option value="cs">Czech</option>
+              <option value="da">Danish</option>
+              <option value="fi">Finnish</option>
+              <option value="no">Norwegian</option>
+              <option value="ro">Romanian</option>
+              <option value="bg">Bulgarian</option>
+              <option value="hr">Croatian</option>
+              <option value="sr">Serbian</option>
+              <option value="sk">Slovak</option>
+              <option value="sl">Slovenian</option>
+              <option value="et">Estonian</option>
+              <option value="lv">Latvian</option>
+              <option value="lt">Lithuanian</option>
+              <option value="ga">Irish</option>
+              <option value="mt">Maltese</option>
+              <option value="is">Icelandic</option>
+              <option value="hy">Armenian</option>
+              <option value="ka">Georgian</option>
+              <option value="az">Azerbaijani</option>
+              <option value="af">Afrikaans</option>
+              <option value="am">Amharic</option>
+              <option value="sq">Albanian</option>
+              <option value="bs">Bosnian</option>
+              <option value="mk">Macedonian</option>
+              <option value="sw">Swahili</option>
+              <option value="xh">Xhosa</option>
+              <option value="zu">Zulu</option>
+              <option value="so">Somali</option>
+              <option value="km">Khmer</option>
+              <option value="lo">Lao</option>
+              <option value="my">Burmese</option>
+              <option value="th">Thai</option>
+              <option value="mn">Mongolian</option>
+              <option value="ne">Nepali</option>
+              <option value="si">Sinhala</option>
+              <option value="tg">Tajik</option>
+              <option value="tk">Turkmen</option>
+              <option value="ky">Kyrgyz</option>
+              <option value="kk">Kazakh</option>
+              <option value="uz">Uzbek</option>
+              <option value="kk">Kazakh</option>
+              <option value="kk">Kazakh</option>
+              <option value="tg">Tajik</option>
+            </select>
+            <label for="target_language">Select Target Language</label>
+          </div>
+        </div>
+        
+        
+        <div class="col-12 input-txt-to-create-vid form-btn-for-text" style="text-align: right;">
+          <button class="btn btn-primary btn-to-mrg-vid" type="submit">Translate</button>
+        </div>
+        
+        <div class="spinner-wrapper" style="display:none; text-align:center;">
+          <div class="spinner-border text-danger form-spinner" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <div class="progress mt-2" style="height: 20px;">
+            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;">0%</div>
+          </div>
+       </div>     
+      </div>      
+    </form>
+    
+    <div>
+      <textarea id="translationResult" name="translationResult" rows="4" cols="50" style="display:none"></textarea>
+    </div>
+  </div>
+  <div>
+  </div>
+</div>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#text-generation-form').on('submit', function(e) {
+        e.preventDefault();
+
+        const updateProgressBar = (percentage) => {
+          const progressBar = document.getElementById('progress-bar');
+          progressBar.style.width = percentage + '%';
+          progressBar.textContent = percentage + '%';
+        };
+
+        let progress = 0;
+        const interval = setInterval(() => {
+          if (progress < 95) {
+            progress += 5;
+            updateProgressBar(progress);
+          } else {
+            clearInterval(interval);
+          }
+        }, 500);
+        
+        var message = $('#message').val();
+        var target_language = $('#target_language').val();
+        
+        $.ajax({
+          type: 'POST',
+          url: '{% url 'language_translation' pk=user.pk %}',
+          data: {
+            'message': message,
+            'target_language': target_language,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          beforeSend: function() {
+            $('.spinner-wrapper').show();
+          },
+          success: function(response) {
+            clearInterval(interval);
+            updateProgressBar(100);
+            $('.spinner-wrapper').hide();
+            document.querySelector("#translationResult").style.display = "block"
+            $('#translationResult').val(response.translated_text);
+          },
+          error: function(error) {
+            clearInterval(interval);
+            $('.spinner-wrapper').hide();
+            alert('An error occurred');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+{% endblock %}
