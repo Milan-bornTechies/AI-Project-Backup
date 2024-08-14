@@ -5,6 +5,7 @@
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.css"
         integrity="sha512-6lLUdeQ5uheMFbWm3CP271l14RsX1xtx+J5x2yeIDkkiBpeVTNhTqijME7GgRKKi6hCqovwCoBTlRBEC20M8Mg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+ 
 <body style="background-color: black;" class="workspace-page-wrapper">
     <div class="container-fluid py-5">
         <div class="container max-st">
@@ -49,10 +50,14 @@
                             {% if not merged_audio_and_video_path %}
                             <div class="col-12 input-txt-to-create-vid">
                                 <div class="form-floating">
-                                    <textarea class="form-control" placeholder="Leave a text here" name="message"
-                                        id="message" style="height: 95px"></textarea>
+                                    <textarea class="form-control promptInputTextarea" placeholder="Leave a text here" name="message"
+                                        id="message" style="height: 95px" required></textarea>
                                     <label for="message">Give Me A Text...</label>
                                 </div>
+                                <div class="inputValueToShort" style="display:none; color: #ff4d4d; background-color: #ffe6e6; border: 1px solid #ff4d4d; border-radius: 5px; padding: 10px; font-size: 14px; font-weight: bold; text-align: center; margin-top: 50px;">
+                                    The prompt input is too short. Please enter at least 5 characters before submitting.
+                                </div>
+                                  
                             </div>
                             <div class="d-flex mt-2 justify-content-center select-gender-main">
                                 <span id="selectgender-title" class="fs-3">Voice : </span>
@@ -120,7 +125,7 @@
                             {% endif %}
                             </div>
                             <div class="merge-final-video {% if shorts_option_selected %}shorts-video-container{% endif %} " style="{% if merged_audio_and_video_path %}display:block {% endif %}">
-                                <h3 class="video_page_title">{{ user_input_text }}</h3>
+                                <h3 class="video_page_title">Merged Video:</h3>
                                 <video width="{% if shorts_option_selected %}290px{% endif %}" height="{% if shorts_option_selected %}440px{% endif %}" controls class="video_generated {% if shorts_option_selected %}shorts-video{% endif %}">
                                     <source src="{{ merged_audio_and_video_path|safe }}" type="video/mp4">
                                     Your browser does not support the video tag.
@@ -256,6 +261,93 @@
     </div>
     </div>
 
+{% comment %} Start Youtube Explainer Form {% endcomment %}
+<div class="form-container youTube_explainier_form" style = "display:none">
+    <h2>YouTube Explainer - Create a Prompt</h2>
+    <div class="form-group">
+        <label for="video-topic">Create a</label>
+        <select id="timing">
+            <option value="">Select duration</option>
+            <option value="1 minute">1 minute</option>
+            <option value="3 minutes">3 minutes</option>
+            <option value="5 minutes">5 minutes</option>
+        </select>
+        <label>YouTube video about</label>
+        <input type="text" id="video-topic" placeholder="Give me an engaging topic..." required>
+    </div>
+    <div class="inputValueToExplainerInForm" style="display:none; color: #ff4d4d; background-color: #ffe6e6; border: 1px solid #ff4d4d; border-radius: 5px; padding: 10px; font-size: 14px; font-weight: bold; text-align: center; margin-top: 50px;">
+        The prompt input is too short. Please enter at least 5 characters before submitting.
+    </div>
+    <div class="form-group horizontal">
+        <label for="language">Language should be</label>
+        <select id="language" class="small-select">
+            <option value="">Select language</option>
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+        </select>
+        <label for="voice-narrator">Voice Settings</label>
+        <select id="voice-narrator" class="small-select">
+            <option value="male">male</option>
+            <option value="female">female</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <select id="audio-library">
+            <option value="">Use OpenAI Audio Library only</option>
+            <!-- Add more audio library options as needed -->
+        </select>
+    </div>
+    <div class="form-group">
+        <button type="button" class="youtube_promt_generate_btn">Continue</button>
+    </div>
+</div>
+{% comment %} End Youtube Explainer Form {% endcomment %}
+
+{% comment %} Start Youtybe Shorts Form {% endcomment %}
+<div class="form-container youTube_short_form" style="display:none">
+    <h2>YouTube Shorts - Create a Prompt</h2>
+    <div class="form-group">
+        <label for="short-timing">Create a</label>
+        <select id="short-timing">
+            <option value="">Select duration</option>
+            <option value="15 seconds">15 seconds</option>
+            <option value="30 seconds">30 seconds</option>
+            <option value="1 minute">1 minute</option>
+        </select>
+        <label>YouTube video about</label>
+        <input type="text" id="short-video-topic" placeholder="Give me an engaging topic..." required>
+    </div>
+    <div class="inputValueToShortInForm" style="display:none; color: #ff4d4d; background-color: #ffe6e6; border: 1px solid #ff4d4d; border-radius: 5px; padding: 10px; font-size: 14px; font-weight: bold; text-align: center; margin-top: 50px;">
+        The prompt input is too short. Please enter at least 5 characters before submitting.
+    </div>
+    <div class="form-group horizontal">
+        <label for="short-language">Language should be</label>
+        <select id="short-language" class="small-select">
+            <option value="">Select language</option>
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+        </select>
+        <label for="short-voice-narrator">Voice Settings</label>
+        <select id="short-voice-narrator" class="small-select">
+            <option value="male">male</option>
+            <option value="female">female</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <select id="short-audio-library">
+            <option value="">Use OpenAI Audio Library only</option>
+            <!-- Add more audio library options as needed -->
+        </select>
+    </div>
+    <div class="form-group">
+        <button type="button" class="youtube_shorts_generate_btn">Continue</button>
+    </div>
+</div>
+
+{% comment %} end Youtube Shorts Form {% endcomment %} 
+
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top pt-2"><i class="bi bi-arrow-up"></i></a>
@@ -291,9 +383,33 @@ function hideLoader() {
     document.getElementById("loader-text").style.display = "none";
 }
 let getGetDemo = document.querySelector(".btn-to-mrg-vid");
-getGetDemo.addEventListener("click", () => {
-    showLoader();
-});
+getGetDemo.addEventListener("click", (event) => {  
+    const inputField = document.querySelector('.promptInputTextarea').value.trim();
+
+    if(inputField.length >= 5){
+        showLoader();
+        $(".select-gender-main").addClass("hide-element");
+        $(".select-gender-main").removeClass("d-flex");
+        let video = document.getElementById("background-myVideo");
+        video.autoplay = true;
+        video.load();
+        $(".input-txt-to-create-vid").hide();
+        $(".maxima-sub-head").hide();
+        $(".try-this").hide();
+        $(".background-video").show();
+        $("#progressBar").show();
+        updateProgressBar();
+        document.querySelector('.youTube_short_form').style.display = "none";
+        document.querySelector('.youTube_explainier_form').style.display = "none";
+    } else {           
+        event.preventDefault(); // Prevent form submission
+        document.querySelector(".inputValueToShort").style.display = "block";
+        setTimeout(function() {
+            document.querySelector(".inputValueToShort").style.display = "none";
+        }, 5000);
+    }
+}); 
+  
 function updateLoaderText() {
     let loaderText = document.getElementById("loader-text");
     let texts = [
@@ -312,22 +428,6 @@ function updateLoaderText() {
     }
     setText();
 }
-$(document).ready(function () {
-    $(".btn-to-mrg-vid").click(function () {
-        $(".select-gender-main").addClass("hide-element");
-        $(".select-gender-main").removeClass("d-flex");
-        let video = document.getElementById("background-myVideo");
-        video.autoplay = true;
-        video.load();
-        $(".input-txt-to-create-vid").hide();
-        $(".maxima-sub-head").hide();
-        $(".try-this").hide();
-        $(".background-video").show();
-        $("#progressBar").show();
-        updateProgressBar();
-    });
-    toggleButton();
-});
 function updateProgressBar() {
     let progressBar = document.getElementById('progress');
     let progressText = document.getElementById('progressText');
@@ -717,7 +817,9 @@ document.getElementById('mediaUpload').addEventListener('change', function (even
             var user_fc = $("#profile-img-id").text()
             var chr = user_fc.split("")
             $(".profile-img-wrapper").replaceWith(chr[0].toUpperCase());
-            $("#navbarCollapse").show();
+            setTimeout(function () {
+                $("#navbarCollapse").fadeIn();
+            }, 1000);            
         });
     </script>
     <script>
@@ -786,23 +888,23 @@ document.getElementById('mediaUpload').addEventListener('change', function (even
         // Check the value of nameofplan and perform actions accordingly
         if (nameofplan === "Free") {
             if (userHistoryCount >= 200) {
-                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg">Generate Video</div>')
+                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg" disabled>Generate Video</div>')
             }
         } else if (nameofplan === "Plus Yearly") {
             if (userHistoryCount >= 50) {
-                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg">Generate Video</div>')
+                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg" disabled>Generate Video</div>')
             }
         } else if (nameofplan === "Plus Monthly") {
             if (userHistoryCount >= 4) {
-                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg">Generate Video</div>')
+                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg" disabled>Generate Video</div>')
             }
         } else if (nameofplan === "Max Yearly") {
             if (userHistoryCount >= 1) {
-                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg">Generate Video</div>')
+                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg" disabled>Generate Video</div>')
             }
         } else if (nameofplan === "Max Monthly") {
             if (userHistoryCount >= 20) {
-                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg">Generate Video</div>')
+                $(".btn.btn-primary.btn-to-mrg-vid").replaceWith('<div id="generateVideoBtn" class="btn-primary btn btn-dark btn-lg" disabled>Generate Video</div>')
             }
         } else {
             alert("Other");
@@ -880,5 +982,97 @@ document.getElementById('mediaUpload').addEventListener('change', function (even
         });
     });
     </script>
+
+
+{% comment %} Start Youtube Explainer and Shorts Form {% endcomment %}
+<script>
+
+    function fetchValuefromform(formType){
+        let sentenceParts = [];
+    
+        if (formType === 'explainer') {
+            const videoTopicInput = document.getElementById('video-topic');
+            if (videoTopicInput.value.trim().length < 5) {
+                console.log(videoTopicInput.value.trim().length)
+                document.querySelector('.inputValueToExplainerInForm').style.display = "block"
+                setTimeout(function() {
+                    document.querySelector(".inputValueToExplainerInForm").style.display = "none";
+                }, 5000);
+                videoTopicInput.focus();
+                return; 
+            }else{
+                const timing = document.getElementById('timing').value;
+                const videoTopic = videoTopicInput.value;
+                if (timing || videoTopic) {
+                    sentenceParts.push(`Create a ${timing} YouTube video about ${videoTopic}`);
+                }       
+                const language = document.getElementById('language').value;
+                if (language) {
+                    sentenceParts.push(`The language used will be ${language}`);
+                }    
+                const voiceNarrator = document.getElementById('voice-narrator').value;
+                if (voiceNarrator) {
+                    sentenceParts.push(`Narrator settings: Use ${voiceNarrator} voice`);
+                }    
+                const audioLibrary = document.getElementById('audio-library').value;
+                if (audioLibrary) {
+                    sentenceParts.push(`Audio source: ${audioLibrary}`);
+                }
+                document.querySelector('.youTube_explainier_form').style.display = "none";
+            }
+        } else if (formType === 'shorts') {
+            const videoTopicInput = document.getElementById('short-video-topic');
+            if (videoTopicInput.value.trim().length < 5) {
+                document.querySelector('.inputValueToShortInForm').style.display = "block"
+                setTimeout(function() {
+                    document.querySelector(".inputValueToShortInForm").style.display = "none";
+                }, 5000);
+                videoTopicInput.focus();
+                return; 
+            }
+    
+            const timing = document.getElementById('short-timing').value;
+            const videoTopic = videoTopicInput.value;
+            if (timing || videoTopic) {
+                sentenceParts.push(`Create a ${timing} YouTube Shorts about ${videoTopic}`);
+            }       
+            const language = document.getElementById('short-language').value;
+            if (language) {
+                sentenceParts.push(`The language used will be ${language}`);
+            }    
+            const voiceNarrator = document.getElementById('short-voice-narrator').value;
+            if (voiceNarrator) {
+                sentenceParts.push(`Narrator settings: Use ${voiceNarrator} voice`);
+            }    
+            const audioLibrary = document.getElementById('short-audio-library').value;
+            if (audioLibrary) {
+                sentenceParts.push(`Audio source: ${audioLibrary}`);
+            }
+            document.querySelector('.youTube_short_form').style.display = "none";
+        }
+    
+        const youtubeSentence = sentenceParts.join('. ') + '.';
+        document.querySelector('#message').innerText = youtubeSentence;
+    }
+
+    document.querySelector("#explainer").addEventListener('click',()=>{
+        document.querySelector('.youTube_short_form').style.display = "none"
+        document.querySelector('.youTube_explainier_form').style.display = "block"
+    })
+    document.querySelector("#shorts").addEventListener('click',()=>{
+        document.querySelector('.youTube_explainier_form').style.display = "none"
+        document.querySelector('.youTube_short_form').style.display = "block"
+    })
+
+    {% comment %} explainer Prompt Generator {% endcomment %}
+    document.querySelector('.youtube_promt_generate_btn').addEventListener('click', () => {
+        fetchValuefromform('explainer');     
+    });
+    
+    document.querySelector('.youtube_shorts_generate_btn').addEventListener('click', () => {
+        fetchValuefromform('shorts');
+    });
+</script>
+{% comment %} End Youtube Explainer and Shorts Form {% endcomment %}
 </body>
 {% endblock %}
