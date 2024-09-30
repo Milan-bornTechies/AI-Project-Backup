@@ -6,7 +6,8 @@
         integrity="sha512-6lLUdeQ5uheMFbWm3CP271l14RsX1xtx+J5x2yeIDkkiBpeVTNhTqijME7GgRKKi6hCqovwCoBTlRBEC20M8Mg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
  
-<body style="background-color: black;" class="workspace-page-wrapper">
+<body style="background-color: black;" class="workspace-page-wrapper"> 
+
     <div class="container-fluid py-5">
         <div class="container max-st">
             <div class="loader-container" style="max-width: 60%;">
@@ -28,7 +29,7 @@
             </div>
             <div class="mx-auto wow fadeIn input-txt-to-create-vid maxima-sub-head" data-wow-delay="0.1s" style=" display: flex;
          justify-content: space-between;">
-                <div class="login-heading-ws">Work-Space</div>
+                <div class="login-heading-ws title-of-page">Work-Space</div>
                 <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse" style="display: none;">
                     <span class="navbar-toggler-icon"></span>
@@ -36,7 +37,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-lg-7 {% if shorts_option_selected %}short-video-col-lg-7{% endif %}">
-                    <div class="wow fadeIn" data-wow-delay="0.3s">
+                    <div class="wow fadeIn dataToHideWhenHistoryShow" data-wow-delay="0.3s">
                         {% if msg %}
                         <p style="color: green;">{{msg}}</p>
                         {% elif msg1 %}
@@ -51,13 +52,15 @@
                             <div class="col-12 input-txt-to-create-vid">
                                 <div class="form-floating">
                                     <textarea class="form-control promptInputTextarea" placeholder="Leave a text here" name="message"
-                                        id="message" style="height: 95px" required></textarea>
+                                        id="message" style="height: 250px" maxlength="250"  required></textarea>
                                     <label for="message">Give Me A Text...</label>
+                                </div>
+                                <div class="char-count" style="text-align: right; font-size: 12px; color: #aaa;">
+                                    <span id="charCount">0</span>/250
                                 </div>
                                 <div class="inputValueToShort" style="display:none; color: #ff4d4d; background-color: #ffe6e6; border: 1px solid #ff4d4d; border-radius: 5px; padding: 10px; font-size: 14px; font-weight: bold; text-align: center; margin-top: 50px;">
                                     The prompt input is too short. Please enter at least 5 characters before submitting.
-                                </div>
-                                  
+                                </div>                                  
                             </div>
                             <div class="d-flex mt-2 justify-content-center select-gender-main">
                                 <span id="selectgender-title" class="fs-3">Voice : </span>
@@ -125,14 +128,71 @@
                             {% endif %}
                             </div>
                             <div class="merge-final-video {% if shorts_option_selected %}shorts-video-container{% endif %} " style="{% if merged_audio_and_video_path %}display:block {% endif %}">
-                                <h3 class="video_page_title">Merged Video:</h3>
-                                <video width="{% if shorts_option_selected %}290px{% endif %}" height="{% if shorts_option_selected %}440px{% endif %}" controls class="video_generated {% if shorts_option_selected %}shorts-video{% endif %}">
+                                <h3 class="video_page_title">{{ user_input_text }}</h3>
+                                <video width="{% if shorts_option_selected %}290px{% endif %}" height="{% if shorts_option_selected %}440px{% endif %}" controls class="video_generated {% if shorts_option_selected %}shorts-video{% endif %}" workspaceIDVideo="{{ work_space_entry.id }}">
                                     <source src="{{ merged_audio_and_video_path|safe }}" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
+                                <button id="editButton-modal" class="btn-76">Show Segments</button>
                                 <a href="{{ merged_audio_and_video_path|safe }}" download="merged_video.mp4"
                                     id="downloadButton" class="btn btn-primary btn-download">Download</a>
+                                
                             </div>
+
+                            {% comment %} Start Youtube Explainer Form {% endcomment %}
+                            <div class="form-container youTube_form">
+                                <div class="form-header">
+                                    <h2 id="form-title">YouTube Explainer - Create a Prompt</h2>
+                                    <span class="close-btn">&times;</span>
+                                </div>
+                                <div class="form-group">
+                                    <label id="create-label" for="video-topic">Create a</label>
+                                    <select id="timing" name="form-video-duration">
+                                        <!-- Options will be dynamically inserted here -->
+                                    </select>
+                                    <label id="video-label">YouTube video about</label>
+                                    <input type="text" id="video-topic" name = "form-message" placeholder="Give me an engaging topic..." required>
+                                </div>
+                                <div class="inputValueToForm" style="display:none; color: #ff4d4d; background-color: #ffe6e6; border: 1px solid #ff4d4d; border-radius: 5px; padding: 10px; font-size: 14px; font-weight: bold; text-align: center; margin-top: 50px;">
+                                    The prompt input is too short. Please enter at least 5 characters before submitting.
+                                </div>
+                                <div class="form-group">
+                                    <label for="voice-narrator">Use Audio Library</label>
+                                    <select id="audio-library" name="form-aiservices">
+                                        <option value="openai">openai</option>
+                                        <option value="google">Google</option>
+                                        <option value="microsoft">Microsoft</option>
+                                        <option value="amazon">Amazon</option>
+                                        <option value="lovoai">Lovo</option>
+                                        <option value="deepgram">Deepgram</option>
+                                        <option value="elevenlabs">ElevenLabs</option>
+                                        <option value="ibm">IBM</option>   
+                                    </select>
+                                </div>
+                                <div class="form-group horizontal">
+                                    <label for="language">Language should be</label>
+                                    <select id="language" class="small-select" name="form-language-option">                                     
+                                    </select>
+                                    <label for="voice-narrator">Voice Settings</label>
+                                    <select id="voice-narrator" name="form-voice-option" class="small-select">
+                                        <option value="male">male</option>
+                                        <option value="female">female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="voice-narrator">Use voice of</label>
+                                    <select id="voice-of-provider" name="form-use-voice-of">
+                                    </select>
+                                </div>
+                                <div class="useVoiceEmptyorNotAvailable" style="display:none; color: #ff4d4d; background-color: #ffe6e6; border: 1px solid #ff4d4d; border-radius: 5px; padding: 10px; font-size: 14px; font-weight: bold; text-align: center; margin-top: 50px;">
+                                    Please select an available service provider, language, or voice narrator for 'Use Voice Of'.
+                                </div> 
+                                <div class="form-group">
+                                    <button type="button" class="youtube_generate_btn">Continue</button>
+                                </div>
+                            </div>                           
+
+                            {% comment %} end Youtube Shorts Form {% endcomment %} 
                             
                         </form>
                         <div class="edited-final-video {% if shorts_option_selected %}shorts-video-container{% endif %}">
@@ -155,7 +215,7 @@
                                                 d="M1.23047 9.5C1.23047 5.34708 4.59708 1.98047 8.75 1.98047C12.9029 1.98047 16.2695 5.34708 16.2695 9.5C16.2695 13.6529 12.9029 17.0195 8.75 17.0195C4.59708 17.0195 1.23047 13.6529 1.23047 9.5ZM8.75 2.80078C5.05012 2.80078 2.05078 5.80012 2.05078 9.5C2.05078 13.1999 5.05012 16.1992 8.75 16.1992C12.4499 16.1992 15.4492 13.1999 15.4492 9.5C15.4492 5.80012 12.4499 2.80078 8.75 2.80078Z"
                                                 fill="white"></path>
                                         </svg>
-                                        <a href="{% if entry.edited_video_url %}{{ entry.edited_video_url }}{% else %}{{ entry.video_url }}{% endif %}" target="_blank">{{ entry.message }}</a>
+                                        <a href="#" data-workspace-id="{{ entry.id }}" data-option-selected="{{ entry.video_option_selected }}"  data-video-title="{{ entry.message }}" data-video-url="{% if entry.edited_video_url %}{{ entry.edited_video_url }}{% else %}{{ entry.video_url }}{% endif %}" class="video-link">{{ entry.message }}</a>
                                     </li>
                                     {% endfor %}
                                 </ul>
@@ -163,75 +223,11 @@
                             </div>
                         </div>
                         {% if merged_audio_and_video_path %}
-                        <div class="edit-popup">
-                            <div class="edit-popup-wrapper">
-                                <div class="menu-header">
-                                    <div class="btn-group-wrapper">
-                                        <button id="segment-button-video"
-                                            class="btn btn-secondary pd-10-25 ct-btn active">Edit Video</button>
-                                        <button id="segment-button-text" class="btn btn-secondary pd-10-25 ct-btn">Edit
-                                            Text</button>
-                                        <!-- <button id="merge-edited-audio-video"
-                                            class="btn btn-secondary pd-10-25 ct-btn">edited-videos</button> -->
-                                    </div>
-                                    <div class="menu-in-edit">
-                                        <div id="closePopup"><i class="fa-solid fa-xmark"></i></div>
-                                    </div>
-                                </div>
-                                <div class="popup-content">
-                                    <div class="segment-texts-main">
-                                        {% for segment_text in segment_texts %}
-                                        <div class="segment-text">
-                                            <h4>Script {{ forloop.counter }}</h4>
-                                            <textarea class="segment-textarea" id="segment-text-{{ forloop.counter }}"
-                                                name="w3review" rows="4" cols="50"
-                                                data-segment-text="{{ forloop.counter }}">{{ segment_text }}</textarea>
-                                        </div>
-                                        {% endfor %}
-                                        <div class="change-in-segment-text"><button
-                                                class="save-segment-text-btn btn btn-outline-success"
-                                                type="button">Update Script</button></div>
-                                    </div>
-                                    <div class="segment-video-main">
-                                        {% if segment_urls %}
-                                        <div class="video-slider-main-container">
-                                            {% for segment_url in segment_urls %}
-                                            <div class="carousel-cell video-wrapper video-container {% if shorts_option_selected %}short-video-edit-video-wrapper{% endif %}">
-                                                <video width="250" height="170" controls class="{% if shorts_option_selected %}short-video-edit-video{% endif %}">
-                                                    <source src="{{ segment_url }}" type="video/mp4">
-                                                    Your browser does not support the video tag.
-                                                </video>
-                                                <div class="uploaded-media"></div>
-                                                <!-- Div to display the uploaded media -->
-                                                <div class="video-overlay {% if shorts_option_selected %}short-video-overlay{% endif %}"></div>
-                                                <p class="delete-video" style="margin-bottom: 0;text-align: end"><a
-                                                        href="#" class="btn ml-1 delete-segment-btn"
-                                                        data-url="{{ segment_url }}"
-                                                        data-segment-index="{{ forloop.counter0 }}"><i
-                                                            class="fa-solid fa-trash"></i><span
-                                                            class="delete-textContent">Delete
-                                                            Video</span></a></p>
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="popup-video-bottom">
-                                    <button class="discard-btn" id="closePopup-dis">Discard</button>
-                                    <button id="merge-edited-audio-video"
-                                        class="btn btn-secondary pd-10-25 ct-btn edit-disable" disabled="disabled">Edit
-                                        Video</button>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
+                        
                     <div class="btn-feed-edit-wrapper {% if shorts_option_selected %}short-feed-edit-wrapper{% endif %}">
                     <button id="feedbackButton">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="c-bfAFXs"><g clip-path="url(#clip0_1788_6916)"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.0011 4.84406C12.6935 4.84406 12.3984 4.96628 12.1809 5.18382C11.9633 5.40136 11.8411 5.69641 11.8411 6.00406V7.00406C11.8411 8.28771 11.3312 9.51878 10.4235 10.4265C9.71635 11.1336 8.81285 11.5994 7.84113 11.7706V17.0041C7.84113 17.5769 8.0687 18.1263 8.47378 18.5314C8.87886 18.9365 9.42827 19.1641 10.0011 19.1641H17.0011C17.0249 19.1641 17.0487 19.1651 17.0723 19.1671C17.2145 19.1792 17.4103 19.1305 17.6298 18.9111C17.8546 18.6863 18.0632 18.3156 18.1803 17.825L19.1589 12.9321C19.1414 12.6507 19.0219 12.3843 18.8214 12.1838C18.6038 11.9663 18.3088 11.8441 18.0011 11.8441H15.0011C14.5372 11.8441 14.1611 11.468 14.1611 11.0041V6.00406C14.1611 5.69641 14.0389 5.40136 13.8214 5.18382C13.6038 4.96628 13.3088 4.84406 13.0011 4.84406ZM7.56549 19.9728C7.49142 20.0924 7.40331 20.204 7.30221 20.3051C6.95714 20.6502 6.48913 20.8441 6.00113 20.8441H4.00113C3.51314 20.8441 3.04512 20.6502 2.70006 20.3051C2.35499 19.9601 2.16113 19.4921 2.16113 19.0041V12.0041C2.16113 11.5161 2.35499 11.0481 2.70006 10.703C3.04512 10.3579 3.51313 10.1641 4.00113 10.1641H7.00113C7.83922 10.1641 8.64298 9.83113 9.23559 9.23852C9.82821 8.64591 10.1611 7.84215 10.1611 7.00406V6.00406C10.1611 5.25085 10.4603 4.52848 10.993 3.99588C11.5256 3.46328 12.2479 3.16406 13.0011 3.16406C13.7543 3.16406 14.4767 3.46328 15.0093 3.99588C15.5419 4.52848 15.8411 5.25085 15.8411 6.00406V10.1641H18.0011C18.7544 10.1641 19.4767 10.4633 20.0093 10.9959C20.5419 11.5285 20.8411 12.2508 20.8411 13.0041C20.8411 13.0594 20.8357 13.1146 20.8248 13.1688L19.8248 18.1688C19.823 18.1778 19.8211 18.1868 19.819 18.1958C19.6478 18.9258 19.3125 19.6043 18.8178 20.099C18.325 20.5917 17.6777 20.8915 16.9697 20.8441H10.0011C9.10913 20.8441 8.24912 20.5337 7.56549 19.9728ZM6.16113 11.8441H4.00113C3.9587 11.8441 3.918 11.8609 3.888 11.8909C3.85799 11.9209 3.84113 11.9616 3.84113 12.0041V19.0041C3.84113 19.0465 3.85799 19.0872 3.888 19.1172C3.918 19.1472 3.9587 19.1641 4.00113 19.1641H6.00113C6.04357 19.1641 6.08427 19.1472 6.11427 19.1172C6.14428 19.0872 6.16113 19.0465 6.16113 19.0041V11.8441Z" fill="white" fill-opacity="0.45"></path></g><defs><clipPath id="clip0_1788_6916"><rect width="24" height="24" fill="white"></rect></clipPath></defs></svg>
                     </button>
-                    <button id="editButton-modal" class="btn-76">Edit</button>
                     </div>
                     <div id="feedbackModal" class="modal">
                         <div class="modal-content">
@@ -261,92 +257,44 @@
     </div>
     </div>
 
-{% comment %} Start Youtube Explainer Form {% endcomment %}
-<div class="form-container youTube_explainier_form" style = "display:none">
-    <h2>YouTube Explainer - Create a Prompt</h2>
-    <div class="form-group">
-        <label for="video-topic">Create a</label>
-        <select id="timing">
-            <option value="">Select duration</option>
-            <option value="1 minute">1 minute</option>
-            <option value="3 minutes">3 minutes</option>
-            <option value="5 minutes">5 minutes</option>
-        </select>
-        <label>YouTube video about</label>
-        <input type="text" id="video-topic" placeholder="Give me an engaging topic..." required>
-    </div>
-    <div class="inputValueToExplainerInForm" style="display:none; color: #ff4d4d; background-color: #ffe6e6; border: 1px solid #ff4d4d; border-radius: 5px; padding: 10px; font-size: 14px; font-weight: bold; text-align: center; margin-top: 50px;">
-        The prompt input is too short. Please enter at least 5 characters before submitting.
-    </div>
-    <div class="form-group horizontal">
-        <label for="language">Language should be</label>
-        <select id="language" class="small-select">
-            <option value="">Select language</option>
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-        </select>
-        <label for="voice-narrator">Voice Settings</label>
-        <select id="voice-narrator" class="small-select">
-            <option value="male">male</option>
-            <option value="female">female</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <select id="audio-library">
-            <option value="">Use OpenAI Audio Library only</option>
-            <!-- Add more audio library options as needed -->
-        </select>
-    </div>
-    <div class="form-group">
-        <button type="button" class="youtube_promt_generate_btn">Continue</button>
-    </div>
-</div>
-{% comment %} End Youtube Explainer Form {% endcomment %}
 
-{% comment %} Start Youtybe Shorts Form {% endcomment %}
-<div class="form-container youTube_short_form" style="display:none">
-    <h2>YouTube Shorts - Create a Prompt</h2>
-    <div class="form-group">
-        <label for="short-timing">Create a</label>
-        <select id="short-timing">
-            <option value="">Select duration</option>
-            <option value="15 seconds">15 seconds</option>
-            <option value="30 seconds">30 seconds</option>
-            <option value="1 minute">1 minute</option>
-        </select>
-        <label>YouTube video about</label>
-        <input type="text" id="short-video-topic" placeholder="Give me an engaging topic..." required>
-    </div>
-    <div class="inputValueToShortInForm" style="display:none; color: #ff4d4d; background-color: #ffe6e6; border: 1px solid #ff4d4d; border-radius: 5px; padding: 10px; font-size: 14px; font-weight: bold; text-align: center; margin-top: 50px;">
-        The prompt input is too short. Please enter at least 5 characters before submitting.
-    </div>
-    <div class="form-group horizontal">
-        <label for="short-language">Language should be</label>
-        <select id="short-language" class="small-select">
-            <option value="">Select language</option>
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-        </select>
-        <label for="short-voice-narrator">Voice Settings</label>
-        <select id="short-voice-narrator" class="small-select">
-            <option value="male">male</option>
-            <option value="female">female</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <select id="short-audio-library">
-            <option value="">Use OpenAI Audio Library only</option>
-            <!-- Add more audio library options as needed -->
-        </select>
-    </div>
-    <div class="form-group">
-        <button type="button" class="youtube_shorts_generate_btn">Continue</button>
-    </div>
-</div>
 
-{% comment %} end Youtube Shorts Form {% endcomment %} 
+
+
+    <div class="edit-popup">
+        <div class="edit-popup-wrapper">
+            <div class="menu-header">
+                <div class="btn-group-wrapper">
+                    <button id="segment-button-video"
+                        class="btn btn-secondary pd-10-25 ct-btn active">Edit Video</button>
+                    <button id="segment-button-text" class="btn btn-secondary pd-10-25 ct-btn">Edit
+                        Text</button>
+                </div>
+                <div class="menu-in-edit">
+                    <div id="closePopup"><i class="fa-solid fa-xmark"></i></div>
+                </div>
+            </div>
+            <div class="popup-content">
+                <div class="segment-texts-main">
+                    <div class="segment-texts-main" id="segment-texts-container">
+                        <!-- Textareas will be dynamically inserted here -->
+                    </div>
+                </div>
+                
+                <div class="segment-video-main">
+                    <div class="video-slider-main-container" id="video-slider-container">
+                        <!-- Video elements will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+            <div class="popup-video-bottom">
+                <button class="discard-btn" id="closePopup-dis">Discard</button>
+                <button id="merge-edited-audio-video"
+                    class="btn btn-secondary pd-10-25 ct-btn edit-disable" disabled="disabled">Edit
+                    Video</button>
+            </div>
+        </div>        
+    </div>
 
 
     <!-- Back to Top -->
@@ -387,7 +335,7 @@ getGetDemo.addEventListener("click", (event) => {
     const inputField = document.querySelector('.promptInputTextarea').value.trim();
 
     if(inputField.length >= 5){
-        showLoader();
+        showLoader();     
         $(".select-gender-main").addClass("hide-element");
         $(".select-gender-main").removeClass("d-flex");
         let video = document.getElementById("background-myVideo");
@@ -666,81 +614,6 @@ document.getElementById('mediaUpload').addEventListener('change', function (even
                 }
                 return cookieValue;
             }
-
-            // Event listener for delete button click
-            $('.delete-segment-btn').on('click', function (e) {
-                e.preventDefault();
-
-                const segmentIndex = $(this).data('segment-index');
-                const segmentUrl = $(this).data('url');
-
-                const csrftoken = getCookie('csrftoken');
-
-                $.ajax({
-                    url: `/delete-segment/{{ work_space_entry.pk }}/${segmentIndex}/`,
-                    type: 'DELETE',
-                    contentType: 'application/json;charset=UTF-8',
-                    data: JSON.stringify({ segment_url: segmentUrl }),
-                    headers: {
-                        'X-CSRFToken': csrftoken
-                    },
-                    success: function (response) {
-                        $("#merge-edited-audio-video").removeClass("edit-disable");
-                        $("#merge-edited-audio-video").removeAttr("disabled");
-                        if (response.success) {
-                            $(e.target).closest('.carousel-cell').remove();
-                            console.log(response.message);
-                            checkCondition();
-                        } else {
-                            console.error(response.message);
-                        }
-
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            });
-
-            //Updating the segment text
-
-            $('.save-segment-text-btn').on('click', function (e) {
-                e.preventDefault();
-
-                const csrftoken = getCookie('csrftoken');
-                const updatedSegmentTexts = {};
-
-                // Loop through each textarea to collect updated segment texts
-                $('.segment-textarea').each(function () {
-                    const segmentIndex = $(this).data('segment-text');
-                    const segmentText = $(this).val();
-                    updatedSegmentTexts[segmentIndex] = segmentText;
-                });
-
-                // Send the updated segment texts to the server
-                $.ajax({
-                    url: `/update-segment-texts/{{ work_space_entry.pk }}/`,
-                    type: 'POST',
-                    data: {
-                        updated_texts: JSON.stringify(updatedSegmentTexts),
-                    },
-                    headers: {
-                        'X-CSRFToken': csrftoken
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            console.log(response.message);
-                            $("#merge-edited-audio-video").removeClass("edit-disable");
-                            $("#merge-edited-audio-video").removeAttr("disabled");
-                        } else {
-                            console.error(response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            });
         });
     </script>
     <script>
@@ -793,10 +666,6 @@ document.getElementById('mediaUpload').addEventListener('change', function (even
             $(".container-fluid.py-5").click(function () {
                 $("#workspace-popup").hide();
             })
-            $("#editButton-modal").click(function () {
-                $(".edit-popup").addClass("openModal");
-                $("body").addClass("hide-scroll");
-            });
             $(".fa-xmark").click(function () {
                 $(".edit-popup").removeClass("openModal");
                 $("body").removeClass("hide-scroll");
@@ -926,7 +795,8 @@ document.getElementById('mediaUpload').addEventListener('change', function (even
         });
         $('.radio-label').click(function() {
             $('.radio-label').removeClass('length-of-video').removeClass('selected');
-            $(this).addClass('length-of-video').addClass('selected');            
+            $(this).addClass('length-of-video').addClass('selected'); 
+            document.querySelector('.youTube_form').style.display = "block"           
         });
         $(document).ready(function() {
     // Get the video element using jQuery
@@ -986,93 +856,460 @@ document.getElementById('mediaUpload').addEventListener('change', function (even
 
 {% comment %} Start Youtube Explainer and Shorts Form {% endcomment %}
 <script>
-
-    function fetchValuefromform(formType){
-        let sentenceParts = [];
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector('.youTube_form').style.display = "none";
+    }); 
     
-        if (formType === 'explainer') {
-            const videoTopicInput = document.getElementById('video-topic');
-            if (videoTopicInput.value.trim().length < 5) {
-                console.log(videoTopicInput.value.trim().length)
-                document.querySelector('.inputValueToExplainerInForm').style.display = "block"
-                setTimeout(function() {
-                    document.querySelector(".inputValueToExplainerInForm").style.display = "none";
-                }, 5000);
-                videoTopicInput.focus();
-                return; 
-            }else{
-                const timing = document.getElementById('timing').value;
-                const videoTopic = videoTopicInput.value;
-                if (timing || videoTopic) {
-                    sentenceParts.push(`Create a ${timing} YouTube video about ${videoTopic}`);
-                }       
-                const language = document.getElementById('language').value;
-                if (language) {
-                    sentenceParts.push(`The language used will be ${language}`);
-                }    
-                const voiceNarrator = document.getElementById('voice-narrator').value;
-                if (voiceNarrator) {
-                    sentenceParts.push(`Narrator settings: Use ${voiceNarrator} voice`);
-                }    
-                const audioLibrary = document.getElementById('audio-library').value;
-                if (audioLibrary) {
-                    sentenceParts.push(`Audio source: ${audioLibrary}`);
-                }
-                document.querySelector('.youTube_explainier_form').style.display = "none";
-            }
-        } else if (formType === 'shorts') {
-            const videoTopicInput = document.getElementById('short-video-topic');
-            if (videoTopicInput.value.trim().length < 5) {
-                document.querySelector('.inputValueToShortInForm').style.display = "block"
-                setTimeout(function() {
-                    document.querySelector(".inputValueToShortInForm").style.display = "none";
-                }, 5000);
-                videoTopicInput.focus();
-                return; 
-            }
+    const formTitle = document.getElementById('form-title');
+    const timingSelect = document.getElementById('timing');
+    const videoTopicInput = document.getElementById('video-topic');
+    const formContainer = document.querySelector('.youTube_form');
+    const closeBtn = document.querySelector('.close-btn');
+    const useOfVoiceSelect = document.querySelector('#voice-of-provider');
     
-            const timing = document.getElementById('short-timing').value;
-            const videoTopic = videoTopicInput.value;
-            if (timing || videoTopic) {
-                sentenceParts.push(`Create a ${timing} YouTube Shorts about ${videoTopic}`);
-            }       
-            const language = document.getElementById('short-language').value;
-            if (language) {
-                sentenceParts.push(`The language used will be ${language}`);
-            }    
-            const voiceNarrator = document.getElementById('short-voice-narrator').value;
-            if (voiceNarrator) {
-                sentenceParts.push(`Narrator settings: Use ${voiceNarrator} voice`);
-            }    
-            const audioLibrary = document.getElementById('short-audio-library').value;
-            if (audioLibrary) {
-                sentenceParts.push(`Audio source: ${audioLibrary}`);
-            }
-            document.querySelector('.youTube_short_form').style.display = "none";
+    const options = {
+        explainer: {
+            title: 'YouTube Explainer - Create a Prompt',
+            durationOptions: [
+                { value_to_pass :'1 minute', value: '500', text: '1 minute' },
+                { value_to_pass :'3 minutes', value: '1000', text: '3 minutes' },
+                { value_to_pass :'5 minutes', value: '1500', text: '5 minutes' }
+            ]
+        },
+        shorts: {
+            title: 'YouTube Shorts - Create a Prompt',
+            durationOptions: [
+                { value_to_pass :'fast Paced', value: '120', text: 'fast Paced' },
+                { value_to_pass :'very fast paced', value: '180', text: 'very fast paced' }
+            ]
         }
+    };
     
-        const youtubeSentence = sentenceParts.join('. ') + '.';
-        document.querySelector('#message').innerText = youtubeSentence;
+    function updateForm(type) {
+        const { title, durationOptions } = options[type];
+        formTitle.innerText = title;
+        timingSelect.innerHTML = durationOptions.map(option => `<option value_to_pass="${option.value_to_pass}" value="${option.value}">${option.text}</option>`).join('');
+        formContainer.style.display = 'block';
+    }
+    
+    document.querySelectorAll('input[name="youtube-option"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            updateForm(this.value);
+        });
+    });
+    
+    document.querySelector('.youtube_generate_btn').addEventListener('click', () => {
+        const formType = document.querySelector('input[name="youtube-option"]:checked').value;
+        fetchValuefromform(formType);
+    });
+    
+    closeBtn.addEventListener('click', () => {
+        formContainer.style.display = "none";
+    });
+    
+    // Initialize with the first selected option
+    updateForm(document.querySelector('input[name="youtube-option"]:checked').value);
+    
+    function fetchValuefromform(formType) {
+        let sentenceParts = [];
+        let settingsParts = [];
+        
+        if (videoTopicInput.value.trim().length < 5) {
+            document.querySelector('.inputValueToForm').style.display = "block";
+            setTimeout(function() {
+                document.querySelector(".inputValueToForm").style.display = "none";
+            }, 5000);
+            videoTopicInput.focus();
+            return;
+        }
+
+        if(useOfVoiceSelect.value == '' || useOfVoiceSelect.value == 'No available voices'){
+            document.querySelector('.useVoiceEmptyorNotAvailable').style.display = "block";
+            setTimeout(function() {
+                document.querySelector(".useVoiceEmptyorNotAvailable").style.display = "none";
+            }, 5000);
+            videoTopicInput.focus();
+            return;
+        }
+        
+        const selectedOption = timingSelect.options[timingSelect.selectedIndex];
+        const valueToPass = selectedOption.getAttribute('value_to_pass');
+        const timing = valueToPass;
+        const videoTopic = videoTopicInput.value;
+    
+        if (timing || videoTopic) {
+            sentenceParts.push(`Create a ${timing} YouTube ${formType === 'explainer' ? 'video' : 'Shorts'} about \n\nTopic :  ${videoTopic}.`);
+        }
+        
+        // Fetching additional data for settings
+        const languageUse = document.getElementById('language')
+                         .options[document.getElementById('language').selectedIndex]
+                         .getAttribute('language_use');
+        
+        if (languageUse) {
+            settingsParts.push(`The language used will be :  ${languageUse}.`);
+        }
+        
+        const voiceNarrator = document.getElementById('voice-narrator').value;
+        if (voiceNarrator) {
+            settingsParts.push(`Use voice :  ${voiceNarrator}.`);
+        }
+        
+        const audioLibrary = document.getElementById('audio-library').value;
+        if (audioLibrary) {
+            settingsParts.push(`Audio source: ${audioLibrary}.`);
+        }
+        
+        const useVoiceOf = document.querySelector('#voice-of-provider').value;
+        if(useVoiceOf){
+            settingsParts.push(`Use Voice of: ${useVoiceOf}.`);
+        }
+        
+        // Hiding form
+        formContainer.style.display = "none";
+        
+        // Clear previous message
+        const messageElement = document.querySelector('#message');
+        messageElement.value = ""; 
+        
+        // Combine both parts: main sentence and settings
+        const youtubeSentence = sentenceParts.join(' ') + '\n\nSettings:\n' + settingsParts.join('\n');
+        messageElement.value = youtubeSentence; 
     }
 
-    document.querySelector("#explainer").addEventListener('click',()=>{
-        document.querySelector('.youTube_short_form').style.display = "none"
-        document.querySelector('.youTube_explainier_form').style.display = "block"
-    })
-    document.querySelector("#shorts").addEventListener('click',()=>{
-        document.querySelector('.youTube_explainier_form').style.display = "none"
-        document.querySelector('.youTube_short_form').style.display = "block"
+    document.querySelector('.promptInputTextarea').addEventListener('input',()=>{
+        textareaMessage = document.querySelector('#message').value
+        videoTopicInput.value = textareaMessage
+
+        const message = document.getElementById('message');
+        const charCount = document.getElementById('charCount');
+        const charCountDiv = document.querySelector('.char-count');
+
+        charCount.innerText = message.value.length;
+
+        if (message.value.length === 250) {
+            charCountDiv.style.color = 'red';
+            charCountDiv.innerHTML = 'Your limit is reached!';
+        } else {
+            charCountDiv.style.color = '#aaa';
+            charCountDiv.innerHTML = `<span id="charCount">${message.value.length}</span>/250`;
+        }
     })
 
-    {% comment %} explainer Prompt Generator {% endcomment %}
-    document.querySelector('.youtube_promt_generate_btn').addEventListener('click', () => {
-        fetchValuefromform('explainer');     
-    });
+
+// Subfeatures from eden ai API 
+    // Function to fetch and update the voice-of-provider dropdown
+    function updateVoiceProvider() {
+        let provider__name = document.querySelector("#audio-library").value;
+        let languageChosen = document.querySelector("#language").value;
+        let gender = document.querySelector("#voice-narrator").value;
     
-    document.querySelector('.youtube_shorts_generate_btn').addEventListener('click', () => {
-        fetchValuefromform('shorts');
+        const options = {method: 'GET', headers: {accept: 'application/json'}};
+    
+        fetch(`https://api.edenai.run/v2/info/provider_subfeatures?feature__name=audio&gender=${gender}&is_working=true&language=${languageChosen}&provider__name=${provider__name}&subfeature__name=text_to_speech`, options)
+        .then(response => response.json())
+        .then(response => {
+            const voiceDropdown = document.getElementById('voice-of-provider');
+            voiceDropdown.innerHTML = ''; // Clear existing options
+    
+            if (response.length > 0 && response[0].tts_models) {
+            const providerModels = response[0].tts_models[provider__name]; // dynamically gets models for the chosen provider
+    
+            // Populate the dropdown with the available voices
+            if (providerModels && providerModels.length > 0) {
+                providerModels.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model;
+                option.text = model;
+                voiceDropdown.appendChild(option);
+                });
+            } else {
+                const noOptions = document.createElement('option');
+                noOptions.text = 'No available voices';
+                voiceDropdown.appendChild(noOptions);
+            }
+            } else {
+            console.error("No TTS models found");
+            }
+        })
+        .catch(err => console.error(err));
+    }
+
+    function updateLanguageProvider() {
+        let provider__name = document.querySelector("#audio-library").value;
+        
+        const options = {method: 'GET', headers: {accept: 'application/json'}};
+    
+        fetch(`https://api.edenai.run/v2/info/provider_subfeatures?feature__name=audio&is_working=true&provider__name=${provider__name}&subfeature__name=text_to_speech`, options)
+        .then(response => response.json())
+        .then(response => {
+            let languages = response[0].languages;  // Fetch the language array
+            let languageSelect = document.querySelector("#language");  // Get the select element
+    
+            // Clear existing options
+            languageSelect.innerHTML = "";
+    
+            // Add new options from the API
+            languages.forEach(lang => {
+                let option = document.createElement("option");
+                option.value = lang.language_code;  // Set the value as language_code
+                option.text = lang.language_name;  // Set the visible text as language_name
+    
+                // Set the "language_use" attribute with the same value as option.text
+                option.setAttribute("language_use", lang.language_name);
+    
+                languageSelect.appendChild(option);  // Append the new option to the select
+            });
+        })
+        .catch(err => console.error(err));
+    }
+  
+    // Attach event listeners to each input to detect changes
+    document.querySelector("#audio-library").addEventListener('change', updateVoiceProvider);
+    document.querySelector("#language").addEventListener('change', updateVoiceProvider);
+    document.querySelector("#voice-narrator").addEventListener('change', updateVoiceProvider);
+    document.querySelector("#audio-library").addEventListener('change', updateLanguageProvider);
+
+    // Call updateVoiceProvider on page load to set the default value
+    window.addEventListener('load', () => {
+        updateVoiceProvider(); 
+        updateLanguageProvider();
     });
+  
+//    End Subfeature from Eden ai API 
 </script>
 {% comment %} End Youtube Explainer and Shorts Form {% endcomment %}
+
+<script>
+    // sidebar History
+document.addEventListener('DOMContentLoaded', function() {
+    const videoLinks = document.querySelectorAll('.video-link');
+    const videoElement = document.querySelector('.video_generated source');
+    const videoTag = document.querySelector('.video_generated');
+    const downloadButton = document.getElementById('downloadButton');
+    const videoTitleElement = document.querySelector('.video_page_title'); 
+    const meargeFinalVideoContainer = document.querySelector('.merge-final-video');
+    let workspaceId = ''; 
+    let dataOptionSelected = '';
+
+    videoLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            document.querySelector('.dataToHideWhenHistoryShow').style.display = 'none';
+            document.querySelector('.merge-final-video').style.display = 'block';
+            
+
+            document.querySelector('.login-heading-ws.title-of-page').textContent = 'History';
+
+            const videoUrl = this.getAttribute('data-video-url');
+            const videoTitleHistory = this.getAttribute('data-video-title');
+            dataOptionSelected = this.getAttribute('data-option-selected');
+            workspaceId = this.getAttribute('data-workspace-id');
+            videoTag.setAttribute('workspaceIDVideo', workspaceId);
+
+            videoTag.style.width = '';
+            videoTag.style.height = '';
+            videoTag.classList.remove('shorts-video');
+            meargeFinalVideoContainer.classList.remove('shorts-video-container');
+
+            if (dataOptionSelected === 'shorts') {
+                meargeFinalVideoContainer.classList.add('shorts-video-container');
+                videoTag.style.width = '290px';
+                videoTag.style.height = '440px';
+                videoTag.classList.add('shorts-video');
+            }
+
+            videoTitleElement.innerText = videoTitleHistory;
+            videoElement.src = videoUrl;
+            videoTag.load();
+
+            videoTag.addEventListener('canplay', function() {
+                videoTag.play().catch(error => {
+                    console.error('Video playback failed:', error);
+                });
+            });
+
+            downloadButton.href = videoUrl;
+        });
+    });
+
+    document.getElementById("editButton-modal").addEventListener("click", function() {        
+        const workspaceIdFromMeargeVideo = videoTag.getAttribute("workspaceidvideo");
+
+        fetch(`/get-upload-files/${workspaceIdFromMeargeVideo}/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); 
+
+            const segmentUrls = data.uploadfiles.segment_urls;
+            const segmentTexts = data.uploadfiles.segment_texts;
+            const uploadVideos = data.uploadfiles.upload_videos;
+            const editedVideo = data.uploadfiles.edited_video;
+
+            // SEGMENTS VIDEOS URL'S
+            const videoContainer = document.getElementById('video-slider-container');
+            videoContainer.innerHTML = '';
+
+            segmentUrls.forEach((url, index) => {
+                const videoWrapper = document.createElement('div');
+                videoWrapper.className = `carousel-cell video-wrapper video-container`;
+                if (dataOptionSelected == 'shorts') {
+                    videoWrapper.classList.add('short-video-edit-video-wrapper');
+                }
+
+                const video = document.createElement('video');
+                video.width = 250;
+                video.height = 170;
+                video.controls = true;
+                if (dataOptionSelected == 'shorts') {
+                    video.classList.add('short-video-edit-video');
+                }
+
+                const source = document.createElement('source');
+                source.src = url;
+                source.type = 'video/mp4';
+                video.appendChild(source);
+                video.innerHTML += "Your browser does not support the video tag.";
+
+                const overlay = document.createElement('div');
+                overlay.className = `video-overlay`;
+                if (dataOptionSelected == 'shorts') {
+                    overlay.classList.add('short-video-overlay');
+                }
+
+                const deleteButton = document.createElement('p');
+                deleteButton.className = "delete-video";
+                deleteButton.style.marginBottom = "0";
+                deleteButton.style.textAlign = "end";
+                deleteButton.innerHTML = `
+                <button type="button" class="btn ml-1 delete-segment-btn"
+                    data-url="${url}"
+                    data-segment-index="${index}">
+                    <i class="fa-solid fa-trash"></i><span class="delete-textContent">Delete Video</span>
+                </button>
+                `;
+
+                videoWrapper.appendChild(video);
+                videoWrapper.appendChild(overlay);
+                videoWrapper.appendChild(deleteButton);
+                videoContainer.appendChild(videoWrapper);
+            });
+
+            //DELETE SEGMENT BUTTTON CODE
+            document.querySelectorAll('.delete-segment-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const segmentUrl = this.getAttribute('data-url');
+                    const videoTag = this.closest('.video-wrapper').querySelector('video'); 
+                    // Send the DELETE request
+                    fetch('/delete-segment/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value // Include CSRF token
+                        },
+                        body: JSON.stringify({
+                            'segment_url': segmentUrl,
+                            'workspace_id': workspaceId
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            this.closest('.video-wrapper').remove();
+                            alert('Segment deleted successfully!');
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+
+
+            // SEGMENTS TEXT
+            const textsContainer = document.getElementById('segment-texts-container');
+            textsContainer.innerHTML = ''; 
+
+            segmentTexts.forEach((text, index) => {
+                const segmentTextDiv = document.createElement('div');
+                segmentTextDiv.className = 'segment-text';
+
+                const header = document.createElement('h4');
+                header.textContent = `Script ${index + 1}`; 
+
+                const textarea = document.createElement('textarea');
+                textarea.className = 'segment-textarea';
+                textarea.id = `segment-text-${index + 1}`; 
+                textarea.name = 'segments-text-of-video'; 
+                textarea.rows = 4;
+                textarea.cols = 50;
+                textarea.dataset.segmentText = index + 1; 
+                textarea.value = text; 
+
+                 // Create a button for each segment
+                const button = document.createElement('button');
+                button.className = 'save-segment-text-btn btn btn-outline-success';
+                button.type = 'button';
+                button.textContent = `Update Script ${index + 1}`; 
+                button.dataset.segmentIndex = index + 1;
+
+                button.addEventListener('click', () => {
+                    const segmentId = `segment-text-${index + 1}`;
+                    const segmentValue = document.getElementById(segmentId).value;
+                    console.log(`Updating Script ${index + 1}:`, segmentValue);
+                   
+                    fetch('/update-segment-texts/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value 
+                        },
+                        body: JSON.stringify({
+                            'segment_index': index + 1,
+                            'segment_text': segmentValue,
+                            'workspace_id': workspaceId
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('Segment text updated successfully!');
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+
+                segmentTextDiv.appendChild(header);
+                segmentTextDiv.appendChild(textarea);
+                segmentTextDiv.appendChild(button);
+                textsContainer.appendChild(segmentTextDiv);
+            });
+
+        })
+        .catch(error => console.error('Error:', error));
+        
+        document.body.classList.add('hide-scroll');
+        document.querySelectorAll('.edit-popup').forEach(function(element) {
+            element.classList.add('openModal');
+        });
+
+    });
+    
+
+});
+
+</script>
 </body>
 {% endblock %}

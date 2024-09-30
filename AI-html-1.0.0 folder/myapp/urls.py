@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.urls import path
 from . import views
 from .views import delete_segment,update_segment_texts,upload_video,merge_edited_audio_video,resend_code,chatbot_response
@@ -15,8 +16,8 @@ urlpatterns = [
     path('onboard/<int:pk>',views.onboard,name='onboard'),
     path('work_space/<int:pk>', views.work_space, name='work_space'),
     path('user_history/<int:pk>', views.user_history, name='user_history'),
-    path('delete-segment/<int:workspace_pk>/<int:segment_index>/', delete_segment, name='delete_segment'),
-    path('update-segment-texts/<int:workspace_pk>/', update_segment_texts, name='update_segment_texts'),
+    path('delete-segment/', delete_segment, name='delete_segment'),
+    path('update-segment-texts/', views.update_segment_texts, name='update_segment_texts'),
     path('upload_video/<int:pk>/', upload_video, name='upload_video'),
     path('merge_edited_audio_video/<int:pk>/', merge_edited_audio_video, name='merge_edited_audio_video'),
     path('smokey/al', views.admin_login, name='admin_login'),  # Updated URL for admin login
@@ -46,4 +47,9 @@ urlpatterns = [
     path('post/<int:pk>/', views.post_detail, name='post_detail'),
     path('platform/<int:pk>/', views.platform_detail, name='platform_detail'),  
     path('platform/<int:platform_id>/blog/<int:pk>/', views.platform_blog_detail, name='platform_blog_detail'),
+    path('get-upload-files/<int:workspace_id>/', views.get_upload_files, name='get_upload_files'),
 ]
+
+admin.site.site_header = "Clipgenie Admin"
+admin.site.site_title = "Clipgenie Admin Portal"
+admin.site.index_title = "Welcome to Clipgenie Portal"
